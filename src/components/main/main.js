@@ -26,11 +26,11 @@ export const htmlCreateCard = (data) => {
                 </p>
 
                 <ul class="list-group list-group-flush">
-                  <li class="list-group-item d-flex justify-content-between align-items-center border-start  border-4 rounded-start">
+                  <li class="list-group-item d-flex justify-content-between align-items-center border-start border-4 rounded-start">
                     <span><i class="bi bi-toggle-on text-success me-2"></i> Estado</span>
                     <span class="fw-semibold text-success">${sensorEstado.valor}</span>
                   </li>
-                  <li class="list-group-item d-flex justify-content-between align-items-center border-start  border-4 rounded-start">
+                  <li class="list-group-item d-flex justify-content-between align-items-center border-start border-4 rounded-start">
                     <span><i class="bi bi-lock-fill text-info me-2"></i> Gabinete</span>
                     <span class="fw-semibold text-info">${sensorGabinete.valor}</span>
                   </li>
