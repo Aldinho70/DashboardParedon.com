@@ -6,10 +6,10 @@ export const getSensorValues = (unit) => {
     for (const i in sensores) {
         if (Object.prototype.hasOwnProperty.call(sensores, i)) {
             const sensor = sensores[i];
-            let valor = unit.calculateSensorValue(sensor.id, lastMessage);
+            const sens = unit.getSensor(sensor.id);            
 
+            let valor = unit.calculateSensorValue(sens, lastMessage);
             if (valor === -348201.3876) valor = 'N/A';
-
             result.push({ nombre: sensor.n, valor });
         }
     }

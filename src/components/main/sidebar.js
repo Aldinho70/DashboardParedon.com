@@ -4,13 +4,14 @@ $(document).ready(function () {
         <i class="bi bi-chevron-right"></i>
     </button>
 
-    <div class="p-3 border-bottom">
+    <div class="p-1 border-bottom">
     <button id="toggleBtn" class="btn btn-sm btn-warning w-100">
         <i class="bi bi-chevron-left"></i> Ocultar panel
     </button>
     </div>
-    <div class="p-3">
-    <h5>Panel de control</h5>
-    <p>Contenido del panel...</p>
+    <div class="p-1">
+        <div id="root-gabinetes" ></div>
+        <div id="root-gabinetes2"></div>
+        <div id="root-gabinetes3"></div>
     </div>`);
 });
