@@ -35,13 +35,14 @@ async function iniciarWialon() {
                 dateParsed
             };
 
+            /**Hcaer funciones de cada una */
             const voltaje = sensors.find(s => s.nombre === "VOLTAJE EXTERNO");
             if (voltaje && voltaje.valor === 'N/A') {
                 _voltaje.falla[name] = unidad;
             } else {
                 _voltaje.ok[name] = unidad;
             }
-
+            
             const gabinete = sensors.find(s => s.nombre === "GABINETE");
             if( gabinete ){
                 if(gabinete.valor === 'N/A'){
@@ -52,7 +53,7 @@ async function iniciarWialon() {
                     _gabinete.cerrado[name] = unidad
                 }
             }
-
+            
             const estado = sensors.find(s => s.nombre === "BOMBA");
             if( estado ){
                 if( estado.valor == 1 ){
@@ -63,19 +64,21 @@ async function iniciarWialon() {
                     _estado.falla[name] = unidad                    
                 }
             }
+            /**Hcaer funciones de cada una */
             
             _units.push(unidad);
         });
-
+        
         console.log("_units", _units);
         console.log("_voltaje", _voltaje);
         console.log("_gabinete", _gabinete);
         console.log("_estado", _estado);
-
+        
         htmlCreateCard(_units);
-        HighChart.initChartGabinetes();
-        HighChart.initChartGabinetes2();
-        HighChart.initChartGabinetes3();
+        HighChart.initChartGabinetes( _gabinete );
+        HighChart.initChartStatus(_estado);
+        HighChart.initChartVoltaje(_voltaje);
+        HighChart.initchartAll(_gabinete,_voltaje, _estado);
 
     } catch (error) {
         console.error("Error al iniciar Wialon:", error);
