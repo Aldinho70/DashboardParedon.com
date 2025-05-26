@@ -1,8 +1,6 @@
+import { htmListCard } from '../../../components/main/main.js';
 class HighChart {
     initChartGabinetes = (data) => {
-        console.log(typeof data.abierto);
-        console.log(Object.keys(data.abierto).length);
-
         Highcharts.chart('root-gabinetes', {
             chart: {
                 type: 'pie',
@@ -16,7 +14,7 @@ class HighChart {
                 data: [
                     { name: 'Abierto', y: Object.keys(data.abierto).length },
                     { name: 'Cerrado', y: Object.keys(data.cerrado).length },
-                    { name: 'fallas', y: Object.keys(data.falla).length }
+                    { name: 'falla', y: Object.keys(data.falla).length }
                 ],
                 showInLegend: true,
                 size: '225%' // aquí agranda el gráfico dentro del chart
@@ -25,7 +23,7 @@ class HighChart {
 
             },
             tooltip: {
-                pointFormat: '<b>{point.name}: {point.percentage:.1f}%</b>'
+                pointFormat: '<b>{point.name}: {point.y} Unidades</b>'
             },
             plotOptions: {
                 pie: {
@@ -36,8 +34,11 @@ class HighChart {
                                 // Aquí va tu lógica
                                 // alert('Hiciste click en:', this.name, 'con valor:', this.y);
                                 // alert('click');
-                                console.log( this.name );
-                                console.log( data );
+                                // console.log( this.name.toLowerCase() );
+                                // console.log( point );
+                                // console.log( data );
+                                // console.log( data[this.name.toLowerCase()] );
+                                htmListCard( data[this.name.toLowerCase()] );
                                 
                             }
                         }
@@ -66,7 +67,7 @@ class HighChart {
                 size: '225%' // aquí agranda el gráfico dentro del chart
             }],
             tooltip: {
-                pointFormat: '<b>{point.name}: {point.percentage:.1f}%</b>'
+                pointFormat: '<b>{point.name}: {point.y} Unidades</b>'
             },
             plotOptions: {
                 pie: {
@@ -74,11 +75,15 @@ class HighChart {
                     point: {
                         events: {
                             click: function () {
-                                // Aquí va tu lógica
-                                // alert('Hiciste click en:', this.name, 'con valor:', this.y);
-                                // alert('click');
-                                console.log( this.name );
-                                console.log( data );
+                                if( this.name == 'Apagados' ){
+                                    htmListCard( data['apagado'] );
+                                }
+                                if( this.name == 'Encendidos' ){
+                                    htmListCard( data['encendido'] );
+                                }
+                                if( this.name == 'Con fallas' ){
+                                    htmListCard( data['falla'] );
+                                }
                                 
                             }
                         }
@@ -106,7 +111,7 @@ class HighChart {
                 size: '225%' // aquí agranda el gráfico dentro del chart
             }],
             tooltip: {
-                pointFormat: '<b>{point.name}: {point.percentage:.1f}%</b>'
+                pointFormat: '<b>{point.name}: {point.y} Unidades</b>'
             },
             plotOptions: {
                 pie: {
@@ -114,11 +119,12 @@ class HighChart {
                     point: {
                         events: {
                             click: function () {
-                                // Aquí va tu lógica
-                                // alert('Hiciste click en:', this.name, 'con valor:', this.y);
-                                // alert('click');
-                                console.log( this.name );
-                                console.log( data );
+                                if( this.name == 'Voltaje correcto' ){
+                                    htmListCard( data['ok'] );
+                                }
+                                if( this.name == 'fallas' ){
+                                    htmListCard( data['falla'] );
+                                }
                                 
                             }
                         }
@@ -193,12 +199,10 @@ class HighChart {
                     point: {
                         events: {
                             click: function () {
-                                // Aquí va tu lógica
-                                // alert('Hiciste click en:', this.name, 'con valor:', this.y);
-                                // alert('click');
+
+                                console.log( this.point );
                                 console.log( this.name );
-                                console.log( gabinete );
-                                
+                                console.log( gabinete );                                
                             }
                         }
                     }

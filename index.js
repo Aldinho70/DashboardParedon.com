@@ -69,10 +69,10 @@ async function iniciarWialon() {
             _units.push(unidad);
         });
         
-        console.log("_units", _units);
-        console.log("_voltaje", _voltaje);
-        console.log("_gabinete", _gabinete);
-        console.log("_estado", _estado);
+        // console.log("_units", _units);
+        // console.log("_voltaje", _voltaje);
+        // console.log("_gabinete", _gabinete);
+        // console.log("_estado", _estado);
         
         htmlCreateCard(_units);
         HighChart.initChartGabinetes( _gabinete );
