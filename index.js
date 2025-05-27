@@ -14,11 +14,19 @@ async function iniciarWialon() {
         const _voltaje = { falla: {}, ok: {} };
         const _estado = { apagado: {}, encendido: {}, falla: {} };
         const _gabinete = { abierto: {}, cerrado: {}, falla: {} };
+        const _notifacines = {}
 
         const session = await wialonSDK.init(TOKEN);
         const user = session.getCurrUser();
         const resource = session.getItems('avl_resource');
+
+        for (var i = 0; i< resource.length; i++) { // construct Select list using found resources		
+		    //addEvent(res[i].getId()); // add event to any resource object
+			resource[i].addListener("messageRegistered", showData); // register event when we will receive message
+	    }
+
         console.log("Usuario:", user.getName());
+        console.log( "resources", resource );
         console.log( "resources", resource[0].getNotifications() );
         
 
@@ -88,5 +96,36 @@ async function iniciarWialon() {
     }
 }
 
+function showData(event) {
+    console.log('nuevo mensaje');
+    
+    //     {
+        //     "t": 1748367945,
+        //     "f": 896,
+        //     "tp": "unm",
+        //     "name": "BOMBA ENCENDIDA NORIA",
+        //     "txt": " MONTE ALEGRE NUEVA BOMBA ENCENDIDA A LAS 27.05.2025 12:45:50",
+        //     "color": "#00998b",
+        //     "url": "",
+        //     "unit": 26918639,
+        //     "blink": 0,
+        //     "x": -103.302702,
+        //     "y": 25.618483,
+        //     "nid": 4,
+        //     "rt": 0,
+        //     "p": {}
+        // }
+        
+        var data = event.getData(); // get data from event
+		
+        if (data.tp && data.tp == "unm") {
+        _notifacines.push( data )
+        console.log(data);
+        
+		// $("#notification").append("<tr><td>" + data.name + "</td><td>" + data.txt + "</td><td id='" + data.t + "' class='close_btn'>x</td><tr>"); // add row with data to info-table
+		// $("#count").text(parseInt($("#count").text()) + 1); // get notification count
+		// $("#container").show();
+	}
+}
 
 iniciarWialon();

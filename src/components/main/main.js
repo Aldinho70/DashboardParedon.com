@@ -1,5 +1,45 @@
 $(document).ready(function () {
   $('#mainContent').html(`
+    <div class="container py-4 " id="root-main-notifation" >
+      <h2 class="mb-4">Notifiaciones</h2>
+      <div class="overflow-auto" style="max-height: 100px;">
+          <div class="toast show w-100" role="alert" aria-live="assertive" aria-atomic="true">
+          <div class="toast-header">
+            <!-- <img src="" class="rounded me-2" alt="..."> -->
+            <strong class="me-auto">Nombre de unidad</strong>
+            <small>Justo ahora</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+          <div class="toast-body">
+            Notifiacion de prueba
+          </div>
+        </div>
+        <br/>
+        <div class="toast show w-100" role="alert" aria-live="assertive" aria-atomic="true">
+          <div class="toast-header">
+            <!-- <img src="" class="rounded me-2" alt="..."> -->
+            <strong class="me-auto">Nombre de unidad</strong>
+            <small>Justo ahora</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+          <div class="toast-body">
+            Notifiacion de prueba
+          </div>
+        </div>
+        <br/>
+        <div class="toast show w-100" role="alert" aria-live="assertive" aria-atomic="true">
+          <div class="toast-header">
+            <!-- <img src="" class="rounded me-2" alt="..."> -->
+            <strong class="me-auto">Nombre de unidad</strong>
+            <small>Justo ahora</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+          <div class="toast-body">
+            Notifiacion de prueba
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="container py-4" id="root-main-1">
       <h2 class="mb-4">📊 Dashboard de Monitoreo – 33 Norias</h2>
       <div class="row row-cols-1 row-cols-md-3 g-4" id="root-card"></div>
@@ -36,7 +76,7 @@ export const htmlCreateCard = (data) => {
                   </li>
                   <li class="list-group-item d-flex justify-content-between align-items-center border-start border-4 rounded-start">
                     <span><i class="bi bi-${(sensorGabinete.valor != 1) ? `lock-fill text-danger` : `unlock-fill text-success`} me-2"></i> Gabinete</span>
-                    <span class="fw-semibold text-${(sensorGabinete.valor != 1) ? `danger` : `success`}">${(sensorGabinete.valor == 'N/A') ? `Error de sensor` : (sensorGabinete.valor) == 0 ? `Cerrado` : `Abierto`}</span>
+                    <span class="fw-semibold text-${(sensorGabinete.valor != 1) ? `danger` : `success`}">${(sensorGabinete.valor == 'N/A') ? `Cerrado` : (sensorGabinete.valor) == 0 ? `Cerrado` : `Abierto`}</span>
                   </li>
                   <li class="list-group-item d-flex justify-content-between align-items-center border-start border-4 rounded-start">
                     <span><i class="bi bi-${(voltaje.valor != 'N/A') ? `battery-charging text-warning` : `battery text-danger`} me-2"></i> Voltaje</span>
@@ -113,9 +153,6 @@ export const htmListCard = (data, name, total) => {
   $('#root-categori').html(`${name}: ${total} unidades.`)
   let index = 0;
 
-  console.log( data );
-  
-
   for (const key in data) {
     if (Object.prototype.hasOwnProperty.call(data, key)) {
       const unit = data[key];
@@ -154,7 +191,7 @@ export const htmListCard = (data, name, total) => {
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                   <span><i class="bi bi-${gabineteIcon} me-2"></i> Gabinete</span>
                   <span class="fw-semibold text-${(sensorGabinete.valor != 1) ? 'danger' : 'success'}">
-                    ${(sensorGabinete.valor == 'N/A') ? 'Error de sensor' : (sensorGabinete.valor == 0 ? 'Cerrado' : 'Abierto')}
+                    ${(sensorGabinete.valor == 'N/A') ? 'Cerrado' : (sensorGabinete.valor == 0 ? 'Cerrado' : 'Abierto')}
                   </span>
                 </li>
                 <li class="list-group-item d-flex justify-content-between align-items-center">
