@@ -17,7 +17,7 @@ class HighChart {
                     { name: 'falla', y: Object.keys(data.falla).length }
                 ],
                 showInLegend: true,
-                size: '225%' // aquí agranda el gráfico dentro del chart
+                size: '225%'
             }],
             legend: {
 
@@ -31,15 +31,7 @@ class HighChart {
                     point: {
                         events: {
                             click: function () {
-                                // Aquí va tu lógica
-                                // alert('Hiciste click en:', this.name, 'con valor:', this.y);
-                                // alert('click');
-                                // console.log( this.name.toLowerCase() );
-                                // console.log( point );
-                                // console.log( data );
-                                // console.log( data[this.name.toLowerCase()] );
                                 htmListCard(data[this.name.toLowerCase()], this.point.name, this.point.y);
-
                             }
                         }
                     }
@@ -64,7 +56,7 @@ class HighChart {
                     { name: 'Con fallas', y: Object.keys(data.falla).length }
                 ],
                 showInLegend: true,
-                size: '225%' // aquí agranda el gráfico dentro del chart
+                size: '225%'
             }],
             tooltip: {
                 pointFormat: '<b>{point.name}: {point.y} Unidades</b>'
@@ -119,15 +111,12 @@ class HighChart {
                     point: {
                         events: {
                             click: function () {
-                                console.log(this.point);
-
                                 if (this.name == 'Voltaje correcto') {
                                     htmListCard(data['ok'], this.point.name, this.point.y);
                                 }
                                 if (this.name == 'fallas') {
                                     htmListCard(data['falla'], this.point.name, this.point.y);
                                 }
-
                             }
                         }
                     }
@@ -206,28 +195,7 @@ class HighChart {
                     point: {
                         events: {
                             click: function () {
-                                console.log(this.point);
-                                console.log(this.name);
-
-                                console.log(all_data[this.owner.toLowerCase()][this.subname]);
                                 htmListCard(all_data[this.owner.toLowerCase()][this.subname], this.point.name, this.point.y );
-                                // switch (this.name) {
-                                //     case 'Gabinete':
-                                //         console.log(gabinete);
-                                //         // htmListCard( gabinete, this.point.name, this.point.y );
-                                //         break;
-                                //     case 'Estado':
-                                //         console.log(estado);
-                                //         break;
-                                //     case 'Voltaje':
-                                //         console.log(voltaje);
-                                //         break;
-
-                                //     default:
-                                //         console.log( browserData );
-                                        
-                                //         break;
-                                // }
                             }
                         }
                     }

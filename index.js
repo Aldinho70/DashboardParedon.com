@@ -12,12 +12,15 @@ async function iniciarWialon() {
     try {
         const _units = [];
         const _voltaje = { falla: {}, ok: {} };
-        const _gabinete = { abierto: {}, cerrado: {}, falla: {} };
         const _estado = { apagado: {}, encendido: {}, falla: {} };
+        const _gabinete = { abierto: {}, cerrado: {}, falla: {} };
 
         const session = await wialonSDK.init(TOKEN);
         const user = session.getCurrUser();
+        const resource = session.getItems('avl_resource');
         console.log("Usuario:", user.getName());
+        console.log( "resources", resource[0].getNotifications() );
+        
 
         const data_units = session.getItems("avl_unit");
         const units = getInformation(data_units);
@@ -46,7 +49,7 @@ async function iniciarWialon() {
             const gabinete = sensors.find(s => s.nombre === "GABINETE");
             if( gabinete ){
                 if(gabinete.valor === 'N/A'){
-                    _gabinete.falla[name] = unidad
+                    _gabinete.cerrado[name] = unidad
                 }else if(gabinete.valor === 1){
                     _gabinete.abierto[name] = unidad
                 }else{
