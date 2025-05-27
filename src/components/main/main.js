@@ -106,11 +106,15 @@ export const htmlCreateCard = (data) => {
 //   }
 // }
 
-export const htmListCard = (data) => {
+export const htmListCard = (data, name, total) => {
   $('#root-list-card').html('');
   $('#root-main-1').addClass('d-none')
   $('#root-main-2').removeClass('d-none')
+  $('#root-categori').html(`${name}: ${total} unidades.`)
   let index = 0;
+
+  console.log( data );
+  
 
   for (const key in data) {
     if (Object.prototype.hasOwnProperty.call(data, key)) {

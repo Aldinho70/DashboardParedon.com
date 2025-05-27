@@ -38,8 +38,8 @@ class HighChart {
                                 // console.log( point );
                                 // console.log( data );
                                 // console.log( data[this.name.toLowerCase()] );
-                                htmListCard( data[this.name.toLowerCase()] );
-                                
+                                htmListCard(data[this.name.toLowerCase()], this.point.name, this.point.y);
+
                             }
                         }
                     }
@@ -75,16 +75,16 @@ class HighChart {
                     point: {
                         events: {
                             click: function () {
-                                if( this.name == 'Apagados' ){
-                                    htmListCard( data['apagado'] );
+                                if (this.name == 'Apagados') {
+                                    htmListCard(data['apagado'], this.point.name, this.point.y);
                                 }
-                                if( this.name == 'Encendidos' ){
-                                    htmListCard( data['encendido'] );
+                                if (this.name == 'Encendidos') {
+                                    htmListCard(data['encendido'], this.point.name, this.point.y);
                                 }
-                                if( this.name == 'Con fallas' ){
-                                    htmListCard( data['falla'] );
+                                if (this.name == 'Con fallas') {
+                                    htmListCard(data['falla'], this.point.name, this.point.y);
                                 }
-                                
+
                             }
                         }
                     }
@@ -119,13 +119,15 @@ class HighChart {
                     point: {
                         events: {
                             click: function () {
-                                if( this.name == 'Voltaje correcto' ){
-                                    htmListCard( data['ok'] );
+                                console.log(this.point);
+
+                                if (this.name == 'Voltaje correcto') {
+                                    htmListCard(data['ok'], this.point.name, this.point.y);
                                 }
-                                if( this.name == 'fallas' ){
-                                    htmListCard( data['falla'] );
+                                if (this.name == 'fallas') {
+                                    htmListCard(data['falla'], this.point.name, this.point.y);
                                 }
-                                
+
                             }
                         }
                     }
@@ -135,6 +137,7 @@ class HighChart {
     }
 
     initchartAll(gabinete, voltaje, estado) {
+        const all_data = { gabinete, voltaje, estado }
         const colors = Highcharts.getOptions().colors;
         const categorias = ['Gabinete', 'Voltaje', 'Estado'];
         const fuentes = [gabinete, voltaje, estado];
@@ -174,9 +177,13 @@ class HighChart {
             const drillDataLen = cat.drilldown.data.length;
             for (let j = 0; j < drillDataLen; j++) {
                 const name = `${cat.name} - ${cat.drilldown.categories[j]}`;
+                const subname = `${cat.drilldown.categories[j]}`;
+                const owner = `${cat.name}`;
                 const brightness = 0.2 - (j / drillDataLen) / 5;
                 versionsData.push({
                     name,
+                    owner,
+                    subname,
                     y: cat.drilldown.data[j],
                     color: Highcharts.color(cat.color).brighten(brightness).get()
                 });
@@ -199,10 +206,28 @@ class HighChart {
                     point: {
                         events: {
                             click: function () {
+                                console.log(this.point);
+                                console.log(this.name);
 
-                                console.log( this.point );
-                                console.log( this.name );
-                                console.log( gabinete );                                
+                                console.log(all_data[this.owner.toLowerCase()][this.subname]);
+                                htmListCard(all_data[this.owner.toLowerCase()][this.subname], this.point.name, this.point.y );
+                                // switch (this.name) {
+                                //     case 'Gabinete':
+                                //         console.log(gabinete);
+                                //         // htmListCard( gabinete, this.point.name, this.point.y );
+                                //         break;
+                                //     case 'Estado':
+                                //         console.log(estado);
+                                //         break;
+                                //     case 'Voltaje':
+                                //         console.log(voltaje);
+                                //         break;
+
+                                //     default:
+                                //         console.log( browserData );
+                                        
+                                //         break;
+                                // }
                             }
                         }
                     }
