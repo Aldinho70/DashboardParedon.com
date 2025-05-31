@@ -1,19 +1,43 @@
 // import {units} from '../../../index.js'
-
+import { getFechaActual } from '../../utils/timestamp.js'
 $(document).ready(function () {
   $('#mainContent').html(`
-    <div class="container " id="root-main-notifation">
-      <div class="d-flex align-items-center mb-3">
-        <i class="bi bi-bell fs-3 me-2 text-warning"></i>
-        <h2 class="mb-0 text-dark">Notificaciones</h2>
-      </div>
-      <div class="overflow-auto bg-white border border-2 rounded-3 shadow-sm  text-center text-muted" style="max-height: 100px;" id="root-notification">
-        <h6 class="mb-0" id="root-notification-nobody">
-          <i class="bi bi-bell-slash me-2 fs-5"></i>Sin notificaciones aún
-        </h6>
+    <span id="root-fecha" >Ultima actualizacion: ${getFechaActual()}<span>
+    <!-- root-notification-->
+      <div class="accordion" id="accordionNotificaciones">
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingNotif">
+            <button class="accordion-button collapsed w-100" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNotif" aria-expanded="false" aria-controls="collapseNotif">
+              <div class="d-flex justify-content-between align-items-center w-100">
+                <div class="d-flex align-items-center">
+                  <i class="bi bi-bell me-2 text-warning fs-4"></i>
+                  <span class="fs-4">Panel de Notificaciones</span>
+                  <span class="badge bg-warning ms-2 btn-lg" id="notif-count">0</span>
+                </div>                
+              </div>
+            </button>
+          </h2>
+
+          <div id="collapseNotif" class="accordion-collapse collapse" aria-labelledby="headingNotif" data-bs-parent="#accordionNotificaciones">
+            <div class="accordion-body">
+              <div class="container" id="root-main-notifation">
+              <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal" >
+                Abrir panel completo de notificaciones
+              </button>
+              <div class="overflow-auto bg-white border border-2 rounded-3 shadow-sm text-center text-muted root-notification " style="max-height: 100px;" >
+                <h6 class="mb-0" id="root-notification-nobody">
+                  <i class="bi bi-bell-slash me-2 fs-5"></i>Sin notificaciones aún
+                </h6>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
+    <!-- root-notification-->
+
     <hr>
+
     <div class="container " id="root-main-1">
       <!--Card info-->
       <div class="row" id="root-card-info"></div>
@@ -28,10 +52,26 @@ $(document).ready(function () {
       <h2 class="mb-4" id="root-categori">📊 Dashboard de Monitoreo – 33 Norias</h2>
       <div class="accordion overflow-auto" id="root-list-card" style="max-height: 500px;"></div>
     </div>
+
+    <!--modal-notification-->
+      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Panel de notificaciones</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body-notifications root-notification"></div>
+            <div class="modal-footer"></div>
+          </div>
+        </div>
+      </div>
+    <!--modal-notification-->
 `);
 });
 
 export const htmlCreateCard = (data) => {
+  $("#root-card").html('')
   data.map(unit => {
     const sensorGabinete = unit.sensors.find(s => s.nombre === "GABINETE");
     const sensorEstado = unit.sensors.find(s => s.nombre === "BOMBA");

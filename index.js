@@ -1,7 +1,7 @@
 import wialonSDK from './src/wialon/sdk/wialonSDK.js';
 import { getSensorValues } from './src/wialon/utils/getSensors.js';
 import { getInformation } from './src/wialon/utils/getInformation.js';
-import { convertTimestamp } from './src/utils/timestamp.js';
+import { convertTimestamp, getFechaActual } from './src/utils/timestamp.js';
 import { htmlCreateCard, htmListCard } from './src/components/main/main.js';
 import { htmlCreateNotification } from './src/components/main/Notifications.js';
 import { htmlCreateCardInfo } from './src/components/main/CardsInfo.js';
@@ -14,7 +14,7 @@ const _estado = { apagado: {}, encendido: {}, falla: {} };
 const _gabinete = { abierto: {}, cerrado: {}, falla: {} };
 const _notifacines = {}
 
-async function iniciarWialon() {
+export async function iniciarWialon() {
     try {
 
         const session = await wialonSDK.init(TOKEN);
@@ -82,11 +82,17 @@ async function iniciarWialon() {
         });
         
         // console.log("_units", _units);
-        console.log("_voltaje", _voltaje);
-        console.log("_gabinete", _gabinete);
-        console.log("_estado", _estado);
+        // console.log("_voltaje", _voltaje);
+        // console.log("_gabinete", _gabinete);
+        // console.log("_estado", _estado);
         
-        htmlCreateCard(_units);
+        
+        $('#root-fecha').val(`Ultima actualizacion: ${getFechaActual()}`)
+        /* CREAR FUNCION DE LIMPIA DE HTML */
+        $("#root-card-info").html('');
+        $("#root-card").html('');
+
+        // htmlCreateCard(_units);
         htmlCreateCardInfo(_gabinete, ['abierto', 'cerrado'], 'gabinete');
         htmlCreateCardInfo(_estado, ['encendido', 'apagado'], 'estado');
         htmlCreateCardInfo(_voltaje, ['ok', 'falla'], 'voltaje');
@@ -103,11 +109,14 @@ async function iniciarWialon() {
 
 const getInfocard = (name, owner, total) => {
     const all_data = { _voltaje, _gabinete, _estado }
-    console.log(all_data[owner]);
-    console.log(all_data[owner][name]);
     htmListCard( all_data[owner][name], name, total )
 };
 
-window.getInfocard = getInfocard; // ✅ Ahora sí ya está definida
+window.getInfocard = getInfocard; 
 
 iniciarWialon();
+
+setInterval(() => {
+
+  wialonSDK.logout(TOKEN) // ejecución cada 10 segundos
+}, 1 * 60 * 1000);

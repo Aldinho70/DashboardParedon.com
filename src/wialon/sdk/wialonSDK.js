@@ -1,5 +1,6 @@
 import { loadLibraries } from '../config/libraries.wialon.js';
 import { all_avl } from '../config/spec.wialon.js';
+import { iniciarWialon } from '../../../index.js';
 
 class WialonSDK {
     constructor() {
@@ -29,6 +30,19 @@ class WialonSDK {
             });
         });
     }
+
+    logout = ( token ) => {
+    wialon.core.Session.getInstance().logout( // if user exist - logout
+        function (code) { // logout callback
+            if (code) {
+                console.log('logout: ' + wialon.core.Errors.getErrorText(code));
+            }
+            else //console.log("Sesion cerrada");
+                // init( token );
+                iniciarWialon( token );
+        }
+    );
+}
 }
 
 export default new WialonSDK();
