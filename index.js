@@ -2,20 +2,20 @@ import wialonSDK from './src/wialon/sdk/wialonSDK.js';
 import { getSensorValues } from './src/wialon/utils/getSensors.js';
 import { getInformation } from './src/wialon/utils/getInformation.js';
 import { convertTimestamp } from './src/utils/timestamp.js';
-import { htmlCreateCard } from './src/components/main/main.js';
+import { htmlCreateCard, htmListCard } from './src/components/main/main.js';
 import { htmlCreateNotification } from './src/components/main/Notifications.js';
 import { htmlCreateCardInfo } from './src/components/main/CardsInfo.js';
 import HighChart from './src/wialon/api/Highchart.js/index.highchart.js'
 
 const TOKEN = "4074942dea57964c374ca3563fe09bf5723A204D0DF9BC90A8D20965BCC0D37210BCAB3D";
+const _units = [];
+const _voltaje = { falla: {}, ok: {} };
+const _estado = { apagado: {}, encendido: {}, falla: {} };
+const _gabinete = { abierto: {}, cerrado: {}, falla: {} };
+const _notifacines = {}
 
 async function iniciarWialon() {
     try {
-        const _units = [];
-        const _voltaje = { falla: {}, ok: {} };
-        const _estado = { apagado: {}, encendido: {}, falla: {} };
-        const _gabinete = { abierto: {}, cerrado: {}, falla: {} };
-        const _notifacines = {}
 
         const session = await wialonSDK.init(TOKEN);
         const user = session.getCurrUser();
@@ -87,9 +87,9 @@ async function iniciarWialon() {
         console.log("_estado", _estado);
         
         htmlCreateCard(_units);
-        htmlCreateCardInfo(_gabinete, ['abierto', 'cerrado']);
-        htmlCreateCardInfo(_estado, ['encendido', 'apagado']);
-        htmlCreateCardInfo(_voltaje, ['ok', 'falla']);
+        htmlCreateCardInfo(_gabinete, ['abierto', 'cerrado'], 'gabinete');
+        htmlCreateCardInfo(_estado, ['encendido', 'apagado'], 'estado');
+        htmlCreateCardInfo(_voltaje, ['ok', 'falla'], 'voltaje');
 
         HighChart.initChartGabinetes( _gabinete );
         HighChart.initChartStatus(_estado);
@@ -100,5 +100,14 @@ async function iniciarWialon() {
         console.error("Error al iniciar Wialon:", error);
     }
 }
+
+const getInfocard = (name, owner, total) => {
+    const all_data = { _voltaje, _gabinete, _estado }
+    console.log(all_data[owner]);
+    console.log(all_data[owner][name]);
+    htmListCard( all_data[owner][name], name, total )
+};
+
+window.getInfocard = getInfocard; // ✅ Ahora sí ya está definida
 
 iniciarWialon();

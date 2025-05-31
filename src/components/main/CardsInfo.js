@@ -15,22 +15,24 @@ const html =
           </div>
         </div>`;
 
-export const htmlCreateCardInfo = (data, filters) => {
+export const htmlCreateCardInfo = (data, filters, owner) => {
     
     for (let i = 0; i < filters.length; i++) {
         const element = filters[i];
         const _data = {
             name: filters[i], 
             data: data[filters[i]],
-            length: Object.keys(data[filters[i]]).length
+            length: Object.keys(data[filters[i]]).length,
+            owner: owner
         }
+        
         htmlCardInfo(_data);
     }
 }
 
 const htmlCardInfo = ( data ) => {
     $("#root-card-info").append(`
-        <div class="card mb-3 col-2 shadow-sm border-0" >
+        <div class="card mb-3 col-2 shadow-sm border-0" onClick="getInfocard('${data.name}', '_${data.owner}', ${data.length})">
           <div class="row g-0 align-items-center">
             <div class="col-auto p-3">
               <div class="bg-${severity[data.name]} bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center " style="width: 50px; height: 50px;">

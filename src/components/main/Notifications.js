@@ -1,24 +1,26 @@
 export const htmlCreateNotification = (event) => {
   console.log(`Nueva notificaciones ${event}`);
 
-  var data = event.getData(); // get data from event
-
+  let data = event.getData(); // get data from event
+  console.log(data);
+  
   if (data.tp && data.tp == "unm") {
+    $("#root-notification-nobody").hide();
     // _notifacines.push(data)
     console.log(`Notificaciones filtrada ${data.txt}`);
 
     $("#root-notification").append(
-      `<div class="toast show w-100" role="alert" aria-live="assertive" aria-atomic="true">
-          <div class="toast-header">
-            <!-- <img src="" class="rounded me-2" alt="..."> -->
-            <strong class="me-auto">Nombre de unidad</strong>
-            <small>Justo ahora</small>
-            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+      `<div class="toast show w-100 border-0 shadow-sm bg-white" role="alert" aria-live="assertive" aria-atomic="true">
+          <div class="toast-header bg-warning text-white rounded-top">
+            <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
+            <strong class="me-auto">${data.name}</strong>
+            <small class="text-light">Justo ahora</small>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
           </div>
-          <div class="toast-body">
-            Notifiacion de prueba
+          <div class="toast-body text-secondary fw-semibold">
+            <span class="text-dark">${data.txt}</span>
           </div>
-      </div>`)
+        </div>`)
   }
 }
 

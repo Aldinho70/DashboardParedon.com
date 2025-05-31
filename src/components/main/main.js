@@ -2,26 +2,31 @@
 
 $(document).ready(function () {
   $('#mainContent').html(`
-    <div class="container py-4 " id="root-main-notifation" >
-      <h2 class="mb-4">Notificaciones</h2>
-      <div class="overflow-auto" style="max-height: 100px;" id="root-notification">
-        
+    <div class="container " id="root-main-notifation">
+      <div class="d-flex align-items-center mb-3">
+        <i class="bi bi-bell fs-3 me-2 text-warning"></i>
+        <h2 class="mb-0 text-dark">Notificaciones</h2>
+      </div>
+      <div class="overflow-auto bg-white border border-2 rounded-3 shadow-sm  text-center text-muted" style="max-height: 100px;" id="root-notification">
+        <h6 class="mb-0" id="root-notification-nobody">
+          <i class="bi bi-bell-slash me-2 fs-5"></i>Sin notificaciones aún
+        </h6>
       </div>
     </div>
-    <div class="container py-4" id="root-main-1">
-      <h2 class="mb-4">📊 Dashboard de Monitoreo – 33 Norias</h2>
-
+    <hr>
+    <div class="container " id="root-main-1">
       <!--Card info-->
       <div class="row" id="root-card-info"></div>
       <!--Card-->
-      
+      <h2 class="mb-4"> Dashboard de Monitoreo – 33 Norias</h2>
+      <hr>      
       <!--Card norias-->
       <div class="row row-cols-1 row-cols-md-3 g-4" id="root-card"></div>
       <!--Card-->
     </div>
     <div class="container py-4 d-none" id="root-main-2">
       <h2 class="mb-4" id="root-categori">📊 Dashboard de Monitoreo – 33 Norias</h2>
-      <div class="accordion" id="root-list-card"></div>
+      <div class="accordion overflow-auto" id="root-list-card" style="max-height: 500px;"></div>
     </div>
 `);
 });
@@ -121,9 +126,9 @@ export const htmlCreateCard = (data) => {
 //   }
 // }
 
-export const htmListCard = (data, name, total) => {
+export const htmListCard = (data, name, total = 0) => {
   $('#root-list-card').html('');
-  $('#root-main-1').addClass('d-none')
+  $('#root-card').addClass('d-none')
   $('#root-main-2').removeClass('d-none')
   $('#root-categori').html(`${name}: ${total} unidades.`)
   let index = 0;
