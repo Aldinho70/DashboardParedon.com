@@ -1,48 +1,23 @@
+// import {units} from '../../../index.js'
+
 $(document).ready(function () {
   $('#mainContent').html(`
     <div class="container py-4 " id="root-main-notifation" >
-      <h2 class="mb-4">Notifiaciones</h2>
-      <div class="overflow-auto" style="max-height: 100px;">
-          <div class="toast show w-100" role="alert" aria-live="assertive" aria-atomic="true">
-          <div class="toast-header">
-            <!-- <img src="" class="rounded me-2" alt="..."> -->
-            <strong class="me-auto">Nombre de unidad</strong>
-            <small>Justo ahora</small>
-            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-          </div>
-          <div class="toast-body">
-            Notifiacion de prueba
-          </div>
-        </div>
-        <br/>
-        <div class="toast show w-100" role="alert" aria-live="assertive" aria-atomic="true">
-          <div class="toast-header">
-            <!-- <img src="" class="rounded me-2" alt="..."> -->
-            <strong class="me-auto">Nombre de unidad</strong>
-            <small>Justo ahora</small>
-            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-          </div>
-          <div class="toast-body">
-            Notifiacion de prueba
-          </div>
-        </div>
-        <br/>
-        <div class="toast show w-100" role="alert" aria-live="assertive" aria-atomic="true">
-          <div class="toast-header">
-            <!-- <img src="" class="rounded me-2" alt="..."> -->
-            <strong class="me-auto">Nombre de unidad</strong>
-            <small>Justo ahora</small>
-            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-          </div>
-          <div class="toast-body">
-            Notifiacion de prueba
-          </div>
-        </div>
+      <h2 class="mb-4">Notificaciones</h2>
+      <div class="overflow-auto" style="max-height: 100px;" id="root-notification">
+        
       </div>
     </div>
     <div class="container py-4" id="root-main-1">
       <h2 class="mb-4">📊 Dashboard de Monitoreo – 33 Norias</h2>
+
+      <!--Card info-->
+      <div class="row" id="root-card-info"></div>
+      <!--Card-->
+      
+      <!--Card norias-->
       <div class="row row-cols-1 row-cols-md-3 g-4" id="root-card"></div>
+      <!--Card-->
     </div>
     <div class="container py-4 d-none" id="root-main-2">
       <h2 class="mb-4" id="root-categori">📊 Dashboard de Monitoreo – 33 Norias</h2>
@@ -197,7 +172,7 @@ export const htmListCard = (data, name, total) => {
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                   <span><i class="bi bi-${voltajeIcon} me-2"></i> Voltaje</span>
                   <span class="fw-semibold text-${(voltaje.valor === 'N/A') ? 'danger' : 'warning'}">
-                    ${(voltaje.valor === 'N/A') ? 'Error de sensor' : voltaje.valor}
+                    ${voltaje.valor}
                   </span>
                 </li>
               </ul>
@@ -209,3 +184,10 @@ export const htmListCard = (data, name, total) => {
     }
   }
 };
+
+export const htmlListCardbyName = (name) => {
+  console.log(name);
+  console.log(units[name]);
+  
+  
+}

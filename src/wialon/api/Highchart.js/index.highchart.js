@@ -195,7 +195,13 @@ class HighChart {
                     point: {
                         events: {
                             click: function () {
-                                htmListCard(all_data[this.owner.toLowerCase()][this.subname], this.point.name, this.point.y );
+                                
+                                if( this.owner ){
+                                    htmListCard(all_data[this.owner.toLowerCase()][this.subname], this.point.name, this.point.y );
+                                }else{
+                                    // htmListCard(all_data[this.point.name.toLowerCase()], this.point.name, this.point.y );
+
+                                }
                             }
                         }
                     }

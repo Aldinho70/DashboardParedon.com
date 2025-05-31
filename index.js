@@ -3,10 +3,11 @@ import { getSensorValues } from './src/wialon/utils/getSensors.js';
 import { getInformation } from './src/wialon/utils/getInformation.js';
 import { convertTimestamp } from './src/utils/timestamp.js';
 import { htmlCreateCard } from './src/components/main/main.js';
+import { htmlCreateNotification } from './src/components/main/Notifications.js';
+import { htmlCreateCardInfo } from './src/components/main/CardsInfo.js';
 import HighChart from './src/wialon/api/Highchart.js/index.highchart.js'
 
 const TOKEN = "4074942dea57964c374ca3563fe09bf5723A204D0DF9BC90A8D20965BCC0D37210BCAB3D";
-
 
 async function iniciarWialon() {
     try {
@@ -22,12 +23,12 @@ async function iniciarWialon() {
 
         for (var i = 0; i< resource.length; i++) { // construct Select list using found resources		
 		    //addEvent(res[i].getId()); // add event to any resource object
-			resource[i].addListener("messageRegistered", showData); // register event when we will receive message
+			resource[i].addListener("messageRegistered", htmlCreateNotification); // register event when we will receive message
 	    }
 
-        console.log("Usuario:", user.getName());
-        console.log( "resources", resource );
-        console.log( "resources", resource[0].getNotifications() );
+        // console.log("Usuario:", user.getName());
+        // console.log( "resources", resource );
+        // console.log( "resources", resource[0].getNotifications() );
         
 
         const data_units = session.getItems("avl_unit");
@@ -48,9 +49,9 @@ async function iniciarWialon() {
 
             /**Hcaer funciones de cada una */
             const voltaje = sensors.find(s => s.nombre === "VOLTAJE EXTERNO");
-            if (voltaje && voltaje.valor === 'N/A') {
+            if (voltaje && voltaje.valor === 'N/A' || voltaje.valor < 5 ) {
                 _voltaje.falla[name] = unidad;
-            } else {
+            } else if( voltaje.valor ){
                 _voltaje.ok[name] = unidad;
             }
             
@@ -81,51 +82,23 @@ async function iniciarWialon() {
         });
         
         // console.log("_units", _units);
-        // console.log("_voltaje", _voltaje);
-        // console.log("_gabinete", _gabinete);
-        // console.log("_estado", _estado);
+        console.log("_voltaje", _voltaje);
+        console.log("_gabinete", _gabinete);
+        console.log("_estado", _estado);
         
         htmlCreateCard(_units);
+        htmlCreateCardInfo(_gabinete, ['abierto', 'cerrado']);
+        htmlCreateCardInfo(_estado, ['encendido', 'apagado']);
+        htmlCreateCardInfo(_voltaje, ['ok', 'falla']);
+
         HighChart.initChartGabinetes( _gabinete );
         HighChart.initChartStatus(_estado);
         HighChart.initChartVoltaje(_voltaje);
         HighChart.initchartAll(_gabinete,_voltaje, _estado);
-
+        
     } catch (error) {
         console.error("Error al iniciar Wialon:", error);
     }
-}
-
-function showData(event) {
-    console.log('nuevo mensaje');
-    
-    //     {
-        //     "t": 1748367945,
-        //     "f": 896,
-        //     "tp": "unm",
-        //     "name": "BOMBA ENCENDIDA NORIA",
-        //     "txt": " MONTE ALEGRE NUEVA BOMBA ENCENDIDA A LAS 27.05.2025 12:45:50",
-        //     "color": "#00998b",
-        //     "url": "",
-        //     "unit": 26918639,
-        //     "blink": 0,
-        //     "x": -103.302702,
-        //     "y": 25.618483,
-        //     "nid": 4,
-        //     "rt": 0,
-        //     "p": {}
-        // }
-        
-        var data = event.getData(); // get data from event
-		
-        if (data.tp && data.tp == "unm") {
-        _notifacines.push( data )
-        console.log(data);
-        
-		// $("#notification").append("<tr><td>" + data.name + "</td><td>" + data.txt + "</td><td id='" + data.t + "' class='close_btn'>x</td><tr>"); // add row with data to info-table
-		// $("#count").text(parseInt($("#count").text()) + 1); // get notification count
-		// $("#container").show();
-	}
 }
 
 iniciarWialon();
