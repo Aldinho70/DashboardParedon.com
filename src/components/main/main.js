@@ -74,9 +74,9 @@ export const htmlCreateCard = (data) => {
   $("#root-card").html('')
   data.map(unit => {
     const sensorGabinete = unit.sensors.find(s => s.nombre === "GABINETE");
-    const sensorEstado = unit.sensors.find(s => s.nombre === "BOMBA");
+    const sensorEstado = unit.sensors.find(s => s.nombre === "BOMBA") ? unit.sensors.find(s => s.nombre === "BOMBA") : 'N/A';
     const voltaje = unit.sensors.find(s => s.nombre === "VOLTAJE EXTERNO");
-
+   
     $('#root-card').append(`
       <!-- Tarjeta Noria -->
           <div class="col">
@@ -88,7 +88,6 @@ export const htmlCreateCard = (data) => {
                 <p class="text-muted small mb-3">
                   <i class="bi bi-clock me-1"></i> Último mensaje: ${unit.dateParsed}
                 </p>
-
                 <ul class="list-group list-group-flush">
                   <li class="list-group-item d-flex justify-content-between align-items-center border-start border-4 rounded-start">
                     <span><i class="bi bi-${(sensorEstado.valor == 1) ? `toggle-on text-success` : `toggle-off text-danger`} me-2"></i> Estado</span>
@@ -183,14 +182,16 @@ export const htmListCard = (data, name, total = 0) => {
       const estadoIcon = (sensorEstado.valor == 1) ? `toggle-on text-success` : `toggle-off text-danger`;
       const gabineteIcon = (sensorGabinete.valor != 1) ? `lock-fill text-danger` : `unlock-fill text-success`;
       const voltajeIcon = (voltaje.valor != 'N/A') ? `battery-charging text-warning` : `battery text-danger`;
+      const estado = (sensorEstado.valor == 1) ? 'encendido' : 'apagado'
 
       $('#root-list-card').append(`
         <div class="accordion-item mb-2">
           <h2 class="accordion-header" id="heading-${index}">
-            <button class="accordion-button collapsed d-flex justify-content-between align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-${index}" aria-expanded="false" aria-controls="collapse-${index}">
+            <button class="accordion-button collapsed d-flex justify-content-between align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-${index}" onClick="getMessagesbyId('${unit.id_unidad}')" aria-expanded="false" aria-controls="collapse-${index}">
               <div class="d-flex flex-column flex-md-row w-100 justify-content-between align-items-center">
                 <span class="fw-bold">
-                  <i class="bi bi-gear-fill me-2"></i> ${unit.name}
+                  <img src="${unit.icon}" class="img-thumbnail" alt="15">
+                  ${unit.name}
                 </span>
                 <span>
                   <i class="bi bi-${estadoIcon} me-2"></i>
@@ -203,7 +204,12 @@ export const htmListCard = (data, name, total = 0) => {
           <div id="collapse-${index}" class="accordion-collapse collapse" aria-labelledby="heading-${index}" data-bs-parent="#root-card">
             <div class="accordion-body">
               <p class="text-muted mb-3"><i class="bi bi-clock me-1"></i> Último mensaje: ${unit.dateParsed}</p>
+              <!--<p class="text-muted mb-3"><i class="bi bi-clock me-1"></i> tiempo ${estado}: <span id="${unit.id_unidad}"></span></p>-->
               <ul class="list-group list-group-flush">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                <span><i class="bi bi-clock me-2"></i> Tiempo ${(sensorEstado.valor == 1) ? 'encendido' : 'apagado'}: <span id="${unit.id_unidad}-${estado}"></span></span>
+                  
+                </li>
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                   <span><i class="bi bi-${estadoIcon} me-2"></i> Estado</span>
                   <span class="fw-semibold text-${(sensorEstado.valor == 1) ? 'success' : 'danger'}">${(sensorEstado.valor == 1) ? 'Encendido' : 'Apagado'}</span>
@@ -233,6 +239,4 @@ export const htmListCard = (data, name, total = 0) => {
 export const htmlListCardbyName = (name) => {
   console.log(name);
   console.log(units[name]);
-  
-  
 }

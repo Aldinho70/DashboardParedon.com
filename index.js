@@ -16,15 +16,17 @@ const to = '2025-05-14T23:59'; /* endDate */
 const _voltaje = { falla: {}, ok: {} };
 const _estado = { apagado: {}, encendido: {}, falla: {} };
 const _gabinete = { abierto: {}, cerrado: {}, falla: {} };
+let messageService;
+let session;
 
 
 export async function iniciarWialon() {
     try {
         const _units = [];
-        const session = await wialonSDK.init(TOKEN);
+        session = await wialonSDK.init(TOKEN);
         const user = session.getCurrUser();
         const resource = session.getItems('avl_resource');
-        const messageService = new MessagesService(from, to);
+        messageService = new MessagesService(from, to);
 
         /* Obtener notificaciones */
             for (var i = 0; i < resource.length; i++) { // construct Select list using found resources		
@@ -32,16 +34,6 @@ export async function iniciarWialon() {
                 resource[i].addListener("messageRegistered", htmlCreateNotification); // register event when we will receive message
             }
         /* Obtener notificaciones */
-
-        /* consulta de mensajes */
-            const unit_messages = await messageService.loadMessagesToday( '21753167' );
-            // const unit_messages = await messageService.loadMessages(_unit.getId());
-            const { messages, count } = unit_messages;
-            let sensorsByMessages = getSensorsValueByMessages(session.getItem('21753167'), messages); console.log( sensorsByMessages );
-            console.log( calcularTiemposBomba(sensorsByMessages) );
-            
-            // console.log(messages);
-        /* consulta de mensajes */
 
         const data_units = session.getItems("avl_unit");
         data_units.forEach(async (_unit) => {
@@ -125,11 +117,21 @@ const getInfocard = (name, owner, total) => {
     const all_data = { _voltaje, _gabinete, _estado }
     htmListCard(all_data[owner][name], name, total)
 };
-
 window.getInfocard = getInfocard;
 
-iniciarWialon();
+const getMessagesbyId = async (id) =>{
+    const unit_messages = await messageService.loadMessagesToday( id );
+    // const unit_messages = await messageService.loadMessages(_unit.getId());
+    const { messages, count } = unit_messages;
+    let sensorsByMessages = getSensorsValueByMessages(session.getItem(id), messages); /*console.log( sensorsByMessages );*/
+    const tiempos = calcularTiemposBomba(sensorsByMessages);        
+    $(`#${id}-encendido`).text(tiempos.encendida)
+    $(`#${id}-apagado`).text(tiempos.apagada)
+}
+window.getMessagesbyId = getMessagesbyId;
 
+
+iniciarWialon();
 // setInterval(() => {
 
 //     wialonSDK.logout(TOKEN) // ejecución cada 10 segundos
