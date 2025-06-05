@@ -132,7 +132,6 @@ window.getMessagesbyId = getMessagesbyId;
 
 
 iniciarWialon();
-// setInterval(() => {
-
-//     wialonSDK.logout(TOKEN) // ejecución cada 10 segundos
-// }, 1 * 60 * 1000);
+setInterval(() => {
+    wialonSDK.logout(TOKEN) 
+}, 1 * 60 * 1000);
