@@ -1,20 +1,3 @@
-const html = 
-        `<div class="card mb-3 col-3 shadow-sm border-0">
-          <div class="row g-0 align-items-center">
-            <div class="col-auto p-3">
-              <div class="bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
-                <i class="bi bi-toggle-on text-success fs-4"></i>
-              </div>
-            </div>
-            <div class="col ps-0">
-              <div class="card-body py-3">
-                <h6 class="card-title mb-1 text-muted">Encendidos</h6>
-                <h4 class="mb-0 fw-bold">5</h4>
-              </div>
-            </div>
-          </div>
-        </div>`;
-
 export const htmlCreateCardInfo = (data, filters, owner) => {
     
     for (let i = 0; i < filters.length; i++) {

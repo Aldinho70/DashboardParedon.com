@@ -54,6 +54,12 @@ export const getSensorsValueByMessages = (unit, messages) => {
     return result;
 }
 
+export const getValueByNameSensor = (unit, sensor) => {
+    const sensors = getSensorValues(unit);
+    const value = sensors.find(s => s.nombre === sensor);
+    return value;
+}
+
 export const calcularTiemposBomba = (data) => {
     let tiempoEncendida = 0;
     let tiempoApagada = 0;
@@ -91,6 +97,39 @@ export const calcularTiemposBomba = (data) => {
     };
 };
 
+export const obtenerEstadosYHoras = (data) => {
+  const estados = [];
+  const tiempos = [];
 
+  const clavesOrdenadas = Object.keys(data).sort((a, b) => Number(a) - Number(b));
 
+  for (const clave of clavesOrdenadas) {
+    const registro = data[clave];
 
+    // ✅ Verificamos que registro exista y sea un array
+    if (Array.isArray(registro)) {
+      const bomba = registro.find(item => item.nombre === 'BOMBA');
+
+      if (bomba) {
+        estados.push(bomba.valor);
+
+        const timestampMs = Number(clave) * 1000;
+        const fecha = new Date(timestampMs);
+        const horaCorta = fecha.toLocaleTimeString('es-MX', {
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false
+        });
+
+        tiempos.push(horaCorta);
+      }
+    } else {
+      console.warn(`Clave ${clave} no tiene un array válido:`, registro);
+    }
+  }
+
+  return {
+    estados,
+    tiempos
+  };
+}

@@ -1,12 +1,15 @@
 import wialonSDK from './src/wialon/sdk/wialonSDK.js';
-import { getSensorValues, getSensorsValueByMessages, calcularTiemposBomba } from './src/wialon/utils/getSensors.js';
+import { getSensorValues, getSensorsValueByMessages, calcularTiemposBomba, getValueByNameSensor, obtenerEstadosYHoras } from './src/wialon/utils/getSensors.js';
 import { getInformation } from './src/wialon/utils/getInformation.js';
 import { convertTimestamp, getFechaActual, toUnixTimestamp } from './src/utils/timestamp.js';
 import { htmlCreateCard, htmListCard } from './src/components/main/main.js';
 import { htmlCreateNotification } from './src/components/main/Notifications.js';
 import { htmlCreateCardInfo } from './src/components/main/CardsInfo.js';
+import { clearHTML, extraerHoras } from './src/utils/utils.js';
 import HighChart from './src/wialon/api/Highchart.js/index.highchart.js'
 import MessagesService from './src/wialon/utils/getMessages.js';
+import { initChartDayBar } from './src/components/UI/Highchart/Highchart.DayBar.js';
+import { initChartDayPie } from './src/components/UI/Highchart/Highchart.DayPie.js';
 
 const TOKEN = "4074942dea57964c374ca3563fe09bf5723A204D0DF9BC90A8D20965BCC0D37210BCAB3D";
 
@@ -18,7 +21,6 @@ const _estado = { apagado: {}, encendido: {}, falla: {} };
 const _gabinete = { abierto: {}, cerrado: {}, falla: {} };
 let messageService;
 let session;
-
 
 export async function iniciarWialon() {
     try {
@@ -55,14 +57,14 @@ export async function iniciarWialon() {
             };
 
             /**Hacer funciones de cada una */
-            const voltaje = sensors.find(s => s.nombre === "VOLTAJE EXTERNO");
+            const voltaje = getValueByNameSensor(_unit, "VOLTAJE EXTERNO");
             if (voltaje && voltaje.valor === 'N/A' || voltaje.valor < 5) {
                 _voltaje.falla[name] = unidad;
             } else if (voltaje.valor) {
                 _voltaje.ok[name] = unidad;
             }
 
-            const gabinete = sensors.find(s => s.nombre === "GABINETE");
+            const gabinete = getValueByNameSensor(_unit, "GABINETE");
             if (gabinete) {
                 if (gabinete.valor === 'N/A') {
                     _gabinete.cerrado[name] = unidad
@@ -73,7 +75,7 @@ export async function iniciarWialon() {
                 }
             }
 
-            const estado = sensors.find(s => s.nombre === "BOMBA");
+            const estado = getValueByNameSensor(_unit, "BOMBA");
             if (estado) {
                 if (estado.valor == 1) {
                     _estado.encendido[name] = unidad
@@ -94,9 +96,7 @@ export async function iniciarWialon() {
         // console.log("_estado", _estado);
 
         $('#root-fecha').val(`Ultima actualizacion: ${getFechaActual()}`)
-        /* CREAR FUNCION DE LIMPIA DE HTML */
-        $("#root-card-info").html('');
-        $("#root-card").html('');
+        clearHTML("#root-card", "#root-card-info")
 
         htmlCreateCard(_units);
         htmlCreateCardInfo(_gabinete, ['abierto', 'cerrado'], 'gabinete');
@@ -119,14 +119,18 @@ const getInfocard = (name, owner, total) => {
 };
 window.getInfocard = getInfocard;
 
-const getMessagesbyId = async (id) =>{
+const getMessagesbyId = async (id, index) =>{
     const unit_messages = await messageService.loadMessagesToday( id );
     // const unit_messages = await messageService.loadMessages(_unit.getId());
     const { messages, count } = unit_messages;
     let sensorsByMessages = getSensorsValueByMessages(session.getItem(id), messages); /*console.log( sensorsByMessages );*/
     const tiempos = calcularTiemposBomba(sensorsByMessages);        
+    console.log( obtenerEstadosYHoras( sensorsByMessages ));
     $(`#${id}-encendido`).text(tiempos.encendida)
     $(`#${id}-apagado`).text(tiempos.apagada)
+
+    initChartDayPie( index, Math.round(extraerHoras(tiempos.encendida)) );
+    initChartDayBar( index, Math.round(extraerHoras(tiempos.encendida)) );
 }
 window.getMessagesbyId = getMessagesbyId;
 

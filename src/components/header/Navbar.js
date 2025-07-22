@@ -10,7 +10,16 @@ $( () => {
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">${client_data.title_navbar}</a>
+                        <a class="nav-link disable" aria-current="page" href="#">${client_data.title_navbar}</a>
+                    </li>                    
+                    <li class="nav-item">
+                        <button type="button" class="btn btn-dark position-relative" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        Notificaciones
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="notif-count">
+                            0
+                            <span class="visually-hidden">unread messages</span>
+                        </span>
+                        </button>
                     </li>                    
                 </ul>
             </div>

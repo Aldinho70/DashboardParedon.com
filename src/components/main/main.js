@@ -1,5 +1,6 @@
-// import {units} from '../../../index.js'
 import { getFechaActual } from '../../utils/timestamp.js'
+import { clearHTML } from '../../utils/utils.js';
+
 $(document).ready(function () {
   $('#mainContent').html(`
     <span id="root-fecha" >Ultima actualizacion: ${getFechaActual()}<span>
@@ -11,8 +12,7 @@ $(document).ready(function () {
               <div class="d-flex justify-content-between align-items-center w-100">
                 <div class="d-flex align-items-center">
                   <i class="bi bi-bell me-2 text-warning fs-4"></i>
-                  <span class="fs-4">Panel de Notificaciones</span>
-                  <span class="badge bg-warning ms-2 btn-lg" id="notif-count">0</span>
+                  <span class="fs-4">Grupos de Norias</span>                  
                 </div>                
               </div>
             </button>
@@ -20,15 +20,8 @@ $(document).ready(function () {
 
           <div id="collapseNotif" class="accordion-collapse collapse" aria-labelledby="headingNotif" data-bs-parent="#accordionNotificaciones">
             <div class="accordion-body">
-              <div class="container" id="root-main-notifation">
-              <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal" >
-                Abrir panel completo de notificaciones
-              </button>
-              <div class="overflow-auto bg-white border border-2 rounded-3 shadow-sm text-center text-muted root-notification " style="max-height: 100px;" >
-                <h6 class="mb-0" id="root-notification-nobody">
-                  <i class="bi bi-bell-slash me-2 fs-5"></i>Sin notificaciones aún
-                </h6>
-              </div>
+              <div class="container" id="">
+              
             </div>
           </div>
         </div>
@@ -41,9 +34,6 @@ $(document).ready(function () {
     <div class="container " id="root-main-1">
       <!--Card info-->
       <div class="row" id="root-card-info"></div>
-      <!--Card-->
-      <h2 class="mb-4"> Dashboard de Monitoreo – 33 Norias</h2>
-      <hr>      
       <!--Card norias-->
       <div class="row row-cols-1 row-cols-md-3 g-4" id="root-card"></div>
       <!--Card-->
@@ -73,7 +63,7 @@ $(document).ready(function () {
 export const htmlCreateCard = (data) => {
   $("#root-card").html('')
   data.map(unit => {
-    const sensorGabinete = unit.sensors.find(s => s.nombre === "GABINETE");
+    const sensorGabinete = unit.sensors.find(s => s.nombre === "GABINETE") ? unit.sensors.find(s => s.nombre === "GABINETE") : 'N/A';
     const sensorEstado = unit.sensors.find(s => s.nombre === "BOMBA") ? unit.sensors.find(s => s.nombre === "BOMBA") : 'N/A';
     const voltaje = unit.sensors.find(s => s.nombre === "VOLTAJE EXTERNO");
    
@@ -109,64 +99,8 @@ export const htmlCreateCard = (data) => {
   })
 }
 
-// export const htmListCard = (data) => {
-//   $('#root-card').html('');
-//   console.log(data);
-//   for (const key in data) {
-//     if (Object.prototype.hasOwnProperty.call(data, key)) {
-//       const unit = data[key];
-
-//       const sensorGabinete = unit.sensors.find(s => s.nombre === "GABINETE");
-//       const sensorEstado = unit.sensors.find(s => s.nombre === "BOMBA");
-//       const voltaje = unit.sensors.find(s => s.nombre === "VOLTAJE EXTERNO");
-
-//       $('#root-card').append(`
-//          <!-- Tarjeta estilo lista -->
-// <div class="mb-3">
-//   <div class="card border-0 shadow-sm rounded-3">
-//     <div class="card-body d-flex flex-column flex-md-row justify-content-between align-items-md-center">
-//       <div>
-//         <h5 class="fw-bold text-dark mb-1">
-//           <i class="bi bi-gear-fill me-2"></i> ${unit.name}
-//         </h5>
-//         <small class="text-muted">
-//           <i class="bi bi-clock me-1"></i> Último mensaje: ${unit.dateParsed}
-//         </small>
-//       </div>
-
-//       <ul class="list-unstyled mt-3 mt-md-0 mb-0">
-//         <li class="d-flex align-items-center mb-1">
-//           <i class="bi bi-${(sensorEstado.valor == 1) ? `toggle-on text-success` : `toggle-off text-danger`} me-2"></i>
-//           <span class="me-2">Estado:</span>
-//           <span class="fw-semibold text-${(sensorEstado.valor == 1) ? `success` : `danger`}">
-//             ${(sensorEstado.valor == 1) ? `Encendido` : `Apagado`}
-//           </span>
-//         </li>
-//         <li class="d-flex align-items-center mb-1">
-//           <i class="bi bi-${(sensorGabinete.valor != 1) ? `lock-fill text-danger` : `unlock-fill text-success`} me-2"></i>
-//           <span class="me-2">Gabinete:</span>
-//           <span class="fw-semibold text-${(sensorGabinete.valor != 1) ? `danger` : `success`}">
-//             ${(sensorGabinete.valor == 'N/A') ? `Error de sensor` : (sensorGabinete.valor) == 0 ? `Cerrado` : `Abierto`}
-//           </span>
-//         </li>
-//         <li class="d-flex align-items-center">
-//           <i class="bi bi-${(voltaje.valor != 'N/A') ? `battery-charging text-warning` : `battery text-danger`} me-2"></i>
-//           <span class="me-2">Voltaje:</span>
-//           <span class="fw-semibold text-${(voltaje.valor === 'N/A') ? `danger` : `warning`}">
-//             ${(voltaje.valor === 'N/A') ? 'Error de sensor' : voltaje.valor}
-//           </span>
-//         </li>
-//       </ul>
-//     </div>
-//   </div>
-// </div>
-// `);
-//     }
-//   }
-// }
-
 export const htmListCard = (data, name, total = 0) => {
-  $('#root-list-card').html('');
+  clearHTML("#root-list-card");
   $('#root-card').addClass('d-none')
   $('#root-main-2').removeClass('d-none')
   $('#root-categori').html(`${name}: ${total} unidades.`)
@@ -175,9 +109,10 @@ export const htmListCard = (data, name, total = 0) => {
   for (const key in data) {
     if (Object.prototype.hasOwnProperty.call(data, key)) {
       const unit = data[key];
-      const sensorGabinete = unit.sensors.find(s => s.nombre === "GABINETE");
-      const sensorEstado = unit.sensors.find(s => s.nombre === "BOMBA");
-      const voltaje = unit.sensors.find(s => s.nombre === "VOLTAJE EXTERNO");
+      
+      const sensorGabinete = (unit.sensors.find(s => s.nombre === "GABINETE")) ? unit.sensors.find(s => s.nombre === "GABINETE") : 0;
+      const sensorEstado = (unit.sensors.find(s => s.nombre === "BOMBA")) ? unit.sensors.find(s => s.nombre === "BOMBA") : 0;
+      const voltaje = (unit.sensors.find(s => s.nombre === "VOLTAJE EXTERNO")) ? unit.sensors.find(s => s.nombre === "VOLTAJE EXTERNO") : 0;
 
       const estadoIcon = (sensorEstado.valor == 1) ? `toggle-on text-success` : `toggle-off text-danger`;
       const gabineteIcon = (sensorGabinete.valor != 1) ? `lock-fill text-danger` : `unlock-fill text-success`;
@@ -187,7 +122,7 @@ export const htmListCard = (data, name, total = 0) => {
       $('#root-list-card').append(`
         <div class="accordion-item mb-2">
           <h2 class="accordion-header" id="heading-${index}">
-            <button class="accordion-button collapsed d-flex justify-content-between align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-${index}" onClick="getMessagesbyId('${unit.id_unidad}')" aria-expanded="false" aria-controls="collapse-${index}">
+            <button class="accordion-button collapsed d-flex justify-content-between align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-${index}" onClick="getMessagesbyId('${unit.id_unidad}', ${index})" aria-expanded="false" aria-controls="collapse-${index}">
               <div class="d-flex flex-column flex-md-row w-100 justify-content-between align-items-center">
                 <span class="fw-bold">
                   <img src="${unit.icon}" class="img-thumbnail" alt="15">
@@ -203,34 +138,85 @@ export const htmListCard = (data, name, total = 0) => {
           </h2>
           <div id="collapse-${index}" class="accordion-collapse collapse" aria-labelledby="heading-${index}" data-bs-parent="#root-card">
             <div class="accordion-body">
-              <p class="text-muted mb-3"><i class="bi bi-clock me-1"></i> Último mensaje: ${unit.dateParsed}</p>
+              
               <!--<p class="text-muted mb-3"><i class="bi bi-clock me-1"></i> tiempo ${estado}: <span id="${unit.id_unidad}"></span></p>-->
-              <ul class="list-group list-group-flush">
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                <span><i class="bi bi-clock me-2"></i> Tiempo ${(sensorEstado.valor == 1) ? 'encendido' : 'apagado'}: <span id="${unit.id_unidad}-${estado}"></span></span>
-                  
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                  <span><i class="bi bi-${estadoIcon} me-2"></i> Estado</span>
-                  <span class="fw-semibold text-${(sensorEstado.valor == 1) ? 'success' : 'danger'}">${(sensorEstado.valor == 1) ? 'Encendido' : 'Apagado'}</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                  <span><i class="bi bi-${gabineteIcon} me-2"></i> Gabinete</span>
-                  <span class="fw-semibold text-${(sensorGabinete.valor != 1) ? 'danger' : 'success'}">
-                    ${(sensorGabinete.valor == 'N/A') ? 'Cerrado' : (sensorGabinete.valor == 0 ? 'Cerrado' : 'Abierto')}
-                  </span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                  <span><i class="bi bi-${voltajeIcon} me-2"></i> Voltaje</span>
-                  <span class="fw-semibold text-${(voltaje.valor === 'N/A') ? 'danger' : 'warning'}">
-                    ${voltaje.valor}
-                  </span>
-                </li>
-              </ul>
+              <div class="row">
+                <div class="col-4 border" >
+                  <ul class="list-group list-group-flush">
+                    <!-- TIEMPO -->
+                    <li class="list-group-item d-flex align-items-center justify-content-between">
+                      <p class="text-muted mb-3"><i class="bi bi-clock me-1"></i> Último mensaje: ${unit.dateParsed}</p>
+                    </li>
+                    <li class="list-group-item d-flex align-items-center justify-content-between">
+                      <div class="d-flex align-items-center w-100">
+                        <div class="me-2 text-nowrap" style="min-width: 130px;">
+                          <i class="bi bi-clock me-2"></i> Tiempo encendido:
+                        </div>
+                        <div class="ms-auto fw-semibold text-end">
+                          <span id="${unit.id_unidad}-encendido"></span>
+                        </div>
+                      </div>
+                    </li>
+                    <li class="list-group-item d-flex align-items-center justify-content-between">
+                      <div class="d-flex align-items-center w-100">
+                        <div class="me-2 text-nowrap" style="min-width: 130px;">
+                          <i class="bi bi-clock me-2"></i> Tiempo apagado:
+                        </div>
+                        <div class="ms-auto fw-semibold text-end">
+                          <span id="${unit.id_unidad}-apagado"></span>
+                        </div>
+                      </div>
+                    </li>
+
+                    <!-- ESTADO -->
+                    <li class="list-group-item d-flex align-items-center justify-content-between">
+                      <div class="d-flex align-items-center w-100">
+                        <div class="me-2 text-nowrap" style="min-width: 130px;">
+                          <i class="bi bi-${estadoIcon} me-2"></i> Estado:
+                        </div>
+                        <div class="ms-auto fw-semibold text-${(sensorEstado.valor == 1) ? 'success' : 'danger'} text-end">
+                          ${(sensorEstado.valor == 1) ? 'Encendido' : 'Apagado'}
+                        </div>
+                      </div>
+                    </li>
+
+                    <!-- GABINETE -->
+                    <li class="list-group-item d-flex align-items-center justify-content-between">
+                      <div class="d-flex align-items-center w-100">
+                        <div class="me-2 text-nowrap" style="min-width: 130px;">
+                          <i class="bi bi-${gabineteIcon} me-2 text-start"></i> Gabinete:
+                        </div>
+                        <div class="ms-auto fw-semibold text-${(sensorGabinete.valor != 1) ? 'danger' : 'success'} text-end">
+                          ${(sensorGabinete.valor == 'N/A') ? 'Cerrado' : (sensorGabinete.valor == 0 ? 'Cerrado' : 'Abierto')}
+                        </div>
+                      </div>
+                    </li>
+
+                    <!-- VOLTAJE -->
+                    <li class="list-group-item d-flex align-items-center justify-content-between">
+                      <div class="d-flex align-items-center w-100">
+                        <div class="me-2 text-nowrap" style="min-width: 130px;">
+                          <i class="bi bi-${voltajeIcon} me-2 text-start"></i> Voltaje:
+                        </div>
+                        <div class="ms-auto fw-semibold text-${(voltaje.valor === 'N/A') ? 'danger' : 'warning'} text-end">
+                          ${voltaje.valor}
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-4 border" >
+                  <div id="root-chart-day-pie-${index}"></div>
+                </div>
+                <div class="col-4 border " >
+                  <div id="root-chart-day-bar-${index}"></div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       `);
+
       index++;
     }
   }
