@@ -4,36 +4,14 @@ import { clearHTML } from '../../utils/utils.js';
 $(document).ready(function () {
   $('#mainContent').html(`
     <span id="root-fecha" >Ultima actualizacion: ${getFechaActual()}<span>
-    <!-- root-notification-->
-      <div class="accordion" id="accordionNotificaciones">
-        <div class="accordion-item">
-          <h2 class="accordion-header" id="headingNotif">
-            <button class="accordion-button collapsed w-100" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNotif" aria-expanded="false" aria-controls="collapseNotif">
-              <div class="d-flex justify-content-between align-items-center w-100">
-                <div class="d-flex align-items-center">
-                  <i class="bi bi-bell me-2 text-warning fs-4"></i>
-                  <span class="fs-4">Grupos de Norias</span>                  
-                </div>                
-              </div>
-            </button>
-          </h2>
 
-          <div id="collapseNotif" class="accordion-collapse collapse" aria-labelledby="headingNotif" data-bs-parent="#accordionNotificaciones">
-            <div class="accordion-body">
-              <div class="container" id="">
-              
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- root-notification-->
+    <div class="row" id="root-card-groups"></div>
 
     <hr>
 
     <div class="container " id="root-main-1">
       <!--Cards de categorias-->
-        <div class="row" id="root-card-info"></div>
+        <div class="row " id="root-card-info"></div>
 
       <hr/>
 

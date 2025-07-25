@@ -6,10 +6,11 @@ import { htmlCreateCard, htmListCard } from './src/components/main/main.js';
 import { htmlCreateNotification } from './src/components/main/Notifications.js';
 import { htmlCreateCardInfo } from './src/components/main/CardsInfo.js';
 import { clearHTML, extraerHoras } from './src/utils/utils.js';
-import HighChart from './src/wialon/api/Highchart.js/index.highchart.js'
-import MessagesService from './src/wialon/utils/getMessages.js';
 import { initChartDayBar } from './src/components/UI/Highchart/Highchart.DayBar.js';
 import { initChartDayPie } from './src/components/UI/Highchart/Highchart.DayPie.js';
+import { getGroups } from './src/components/main/Groups.js';
+import HighChart from './src/wialon/api/Highchart.js/index.highchart.js'
+import MessagesService from './src/wialon/utils/getMessages.js';
 
 const TOKEN = "4074942dea57964c374ca3563fe09bf5723A204D0DF9BC90A8D20965BCC0D37210BCAB3D";
 
@@ -28,6 +29,8 @@ export async function iniciarWialon() {
         session = await wialonSDK.init(TOKEN);
         const user = session.getCurrUser();
         const resource = session.getItems('avl_resource');
+        const groups = session.getItems('avl_unit_group');
+
         messageService = new MessagesService(from, to);
 
         /* Obtener notificaciones */
@@ -39,7 +42,6 @@ export async function iniciarWialon() {
 
         const data_units = session.getItems("avl_unit");
         data_units.forEach(async (_unit) => {
-
             const name = _unit.getName();
             const sensors = getSensorValues(_unit);
             const last_message = _unit.getLastMessage();
@@ -96,8 +98,12 @@ export async function iniciarWialon() {
         // console.log("_estado", _estado);
 
         $('#root-fecha').val(`Ultima actualizacion: ${getFechaActual()}`)
-        clearHTML("#root-card", "#root-card-info")
+        clearHTML("#root-card", "#root-card-info ", "#root-card-groups")
 
+        /* grupos de la cuenta */
+            getGroups( groups );
+        /* grupos de la cuenta */
+        
         htmlCreateCard(_units);
         htmlCreateCardInfo(_estado, ['encendido', 'apagado'], 'estado');
         htmlCreateCardInfo(_gabinete, ['abierto', 'cerrado'], 'gabinete');
@@ -124,8 +130,7 @@ const getMessagesbyId = async (id, index) =>{
     // const unit_messages = await messageService.loadMessages(_unit.getId());
     const { messages, count } = unit_messages;
     let sensorsByMessages = getSensorsValueByMessages(session.getItem(id), messages); /*console.log( sensorsByMessages );*/
-    const tiempos = calcularTiemposBomba(sensorsByMessages);        
-    console.log( obtenerEstadosYHoras( sensorsByMessages ));
+    const tiempos = calcularTiemposBomba(sensorsByMessages);
     $(`#${id}-encendido`).text(tiempos.encendida)
     $(`#${id}-apagado`).text(tiempos.apagada)
 
