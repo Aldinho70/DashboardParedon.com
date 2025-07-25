@@ -32,16 +32,20 @@ $(document).ready(function () {
     <hr>
 
     <div class="container " id="root-main-1">
-      <!--Card info-->
-      <div class="row" id="root-card-info"></div>
-      <!--Card norias-->
-      <div class="row row-cols-1 row-cols-md-3 g-4" id="root-card"></div>
-      <!--Card-->
+      <!--Cards de categorias-->
+        <div class="row" id="root-card-info"></div>
+
+      <hr/>
+
+      <!--Cards de todas las bombas-->
+        <div class="row row-cols-1 row-cols-md-3 g-4" id="root-card"></div>
     </div>
-    <div class="container py-4 d-none" id="root-main-2">
-      <h2 class="mb-4" id="root-categori">📊 Dashboard de Monitoreo – 33 Norias</h2>
-      <div class="accordion overflow-auto" id="root-list-card" style="max-height: 500px;"></div>
-    </div>
+
+    <!--Cards de bombas por categoria-->
+      <div class="container d-none" id="root-main-2">
+        <h2 class="mb-4" id="root-categori">📊 Dashboard de Monitoreo – 33 Norias</h2>
+        <div class="accordion overflow-auto" id="root-list-card" style="max-height: 500px;"></div>
+      </div>
 
     <!--modal-notification-->
       <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -103,7 +107,7 @@ export const htmListCard = (data, name, total = 0) => {
   clearHTML("#root-list-card");
   $('#root-card').addClass('d-none')
   $('#root-main-2').removeClass('d-none')
-  $('#root-categori').html(`${name}: ${total} unidades.`)
+  $('#root-categori').html(`${name.charAt(0).toUpperCase() + name.slice(1)}: ${total} unidades.`)
   let index = 0;
 
   for (const key in data) {
@@ -121,7 +125,7 @@ export const htmListCard = (data, name, total = 0) => {
 
       $('#root-list-card').append(`
         <div class="accordion-item mb-2">
-          <h2 class="accordion-header" id="heading-${index}">
+          <h2 class="accordion-header rounded-5" id="heading-${index}">
             <button class="accordion-button collapsed d-flex justify-content-between align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-${index}" onClick="getMessagesbyId('${unit.id_unidad}', ${index})" aria-expanded="false" aria-controls="collapse-${index}">
               <div class="d-flex flex-column flex-md-row w-100 justify-content-between align-items-center">
                 <span class="fw-bold">
@@ -140,8 +144,8 @@ export const htmListCard = (data, name, total = 0) => {
             <div class="accordion-body">
               
               <!--<p class="text-muted mb-3"><i class="bi bi-clock me-1"></i> tiempo ${estado}: <span id="${unit.id_unidad}"></span></p>-->
-              <div class="row">
-                <div class="col-4 border" >
+              <div class="row shadow-lg">
+                <div class="col-4 border rounded-start" >
                   <ul class="list-group list-group-flush">
                     <!-- TIEMPO -->
                     <li class="list-group-item d-flex align-items-center justify-content-between">
@@ -208,7 +212,7 @@ export const htmListCard = (data, name, total = 0) => {
                 <div class="col-4 border" >
                   <div id="root-chart-day-pie-${index}"></div>
                 </div>
-                <div class="col-4 border " >
+                <div class="col-4 border rounded-end" >
                   <div id="root-chart-day-bar-${index}"></div>
                 </div>
               </div>

@@ -14,22 +14,28 @@ export const htmlCreateCardInfo = (data, filters, owner) => {
 }
 
 const htmlCardInfo = ( data ) => {
-    $("#root-card-info").append(`
-        <div class="card mb-3 col-2 shadow-sm border-0" onClick="getInfocard('${data.name}', '_${data.owner}', ${data.length})">
-          <div class="row g-0 align-items-center">
-            <div class="col-auto p-3">
-              <div class="bg-${severity[data.name]} bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center " style="width: 50px; height: 50px;">
-                <i class="bi bi-${icons[data.name]} text-${severity[data.name]} fs-4"></i>
-              </div>
-            </div>
-            <div class="col ps-0">
-              <div class="card-body py-3">
-                <h6 class="card-title mb-1 text-muted text-center">${data.name}</h6>
-                <h4 class="mb-0 fw-bold text-center">${data.length}</h4>
-              </div>
-            </div>
-          </div>
+    if ($(`body .${data.owner}-card`).length == 0){
+      $("#root-card-info").append(`
+        <div class="card mb-3 col-4 shadow-sm border-0">
+          <div class="card-header fw-bold text-center">${data.owner.charAt(0).toUpperCase() + data.owner.slice(1)}</div>
+          <div class="card-body ${data.owner}-card row" id=""></div>
         </div>`);
+    }
+
+    $(`.${data.owner}-card`).append(`      
+      <div class="row g-0 align-items-center col-6  hover-animate" onClick="getInfocard('${data.name}', '_${data.owner}', ${data.length})">
+        <div class="col-auto p-3">
+          <div class="bg-${severity[data.name]} bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center " style="width: 50px; height: 50px;">
+            <i class="bi bi-${icons[data.name]} text-${severity[data.name]} fs-4"></i>
+          </div>
+        </div>
+        <div class="col ps-0">
+          <div class="card-body py-3">
+            <h6 class="card-title mb-1 text-muted text-center">${data.name.charAt(0).toUpperCase() + data.name.slice(1)}</h6>
+            <h4 class="mb-0 fw-bold text-center">${data.length}</h4>
+          </div>
+        </div>
+      </div>`);
 }
 
 const icons = {

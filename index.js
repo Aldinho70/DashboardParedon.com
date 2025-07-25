@@ -99,13 +99,13 @@ export async function iniciarWialon() {
         clearHTML("#root-card", "#root-card-info")
 
         htmlCreateCard(_units);
-        htmlCreateCardInfo(_gabinete, ['abierto', 'cerrado'], 'gabinete');
         htmlCreateCardInfo(_estado, ['encendido', 'apagado'], 'estado');
+        htmlCreateCardInfo(_gabinete, ['abierto', 'cerrado'], 'gabinete');
         htmlCreateCardInfo(_voltaje, ['ok', 'falla'], 'voltaje');
 
         HighChart.initChartGabinetes(_gabinete);
-        HighChart.initChartStatus(_estado);
         HighChart.initChartVoltaje(_voltaje);
+        HighChart.initChartStatus(_estado);
         HighChart.initchartAll(_gabinete, _voltaje, _estado);
 
     } catch (error) {
