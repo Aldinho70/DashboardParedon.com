@@ -1,6 +1,4 @@
 export const initChartDayPie = (id, data) => {
-    console.log(data);
-
     const porcentaje = Math.round(data * 100 / 24)
     const tiempos = {
         Encendido: data,
