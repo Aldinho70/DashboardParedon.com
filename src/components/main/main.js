@@ -3,7 +3,16 @@ import { clearHTML } from '../../utils/utils.js';
 
 $(document).ready(function () {
   $('#mainContent').html(`
+
     <div class="container-fluid py-3 px-4">
+      <center>
+          <div id="loading" class="p-5">
+          <img src="./src/assets/img/logojd.png" alt="Cargando..." /><br>
+          
+          <h1 class="text-dark">Cargando informacion...</h1>
+          </div>
+      </center>
+
       <div class="d-flex justify-content-between align-items-center mb-3">
         <span id="root-fecha" class="text-muted small fw-semibold">
           Última actualización: ${getFechaActual()}
@@ -48,6 +57,7 @@ $(document).ready(function () {
       </div>
     </div>
   `);
+  $("#loading").fadeIn();
 });
 
 

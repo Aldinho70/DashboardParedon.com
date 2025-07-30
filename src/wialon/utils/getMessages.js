@@ -47,7 +47,7 @@ class MessagesService {
                 return;
             }
             this.to = this.session.getServerTime();
-            this.from = this.to - (3600 * 24);  // Últimas 24 horas
+            this.from = this.to - (3600 * 24 * 15);  // Últimas 24 horas
             
             // Usando flags y flagsMask para cargar toda la información disponible
             const flags = 0x0000;

@@ -1,8 +1,8 @@
 export const initChartDayPie = (id, data) => {
-    const porcentaje = Math.round(data * 100 / 24)
+    const porcentaje = Math.round(data * 100 / (24 * 15));
     const tiempos = {
         Encendido: data,
-        Apagado: 24 - data
+        Apagado: (24 * 15) - data
 
     }
     Highcharts.chart(`root-chart-day-pie-${id}`, {
@@ -42,7 +42,7 @@ export const initChartDayPie = (id, data) => {
                 innerSize: '50%',
                 dataLabels: {
                     enabled: true,
-                    format: `{point.name}: {point.y}% de las ultimas 24 horas`
+                    format: `{point.name}: {point.y}% de las ultimas 15 dias`
                 },
                 point: {
                     events: {

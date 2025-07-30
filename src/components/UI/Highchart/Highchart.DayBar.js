@@ -20,7 +20,7 @@ export const initChartDayBar = ( id, data ) =>{
             <span class="fw-bold text-dark">${this.key}</span>
             </div>
             <div class="text-secondary small">
-            Horas de <span class="text-capitalize">${this.key}</span> de las últimas 24 horas:
+            Horas de <span class="text-capitalize">${this.key}</span> de los últimos 15 dias:
             </div>
             <div class="fw-semibold text-primary">
             ${this.y} horas
@@ -45,7 +45,7 @@ export const initChartDayBar = ( id, data ) =>{
                 color: '#28a745'
             },
             {
-                y: (24-data),
+                y: ((24 * 15)-data),
                 color: '#dc3545'
 
             }

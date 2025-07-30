@@ -4,7 +4,7 @@ import { convertTimestamp, getFechaActual } from './src/utils/timestamp.js';
 import { htmlCreateCard, htmListCard } from './src/components/main/main.js';
 import { htmlCreateNotification } from './src/components/main/Notifications.js';
 import { htmlCreateCardInfo } from './src/components/main/CardsInfo.js';
-import { clearHTML, extraerHoras } from './src/utils/utils.js';
+import { clearHTML, extraerHoras, convertirTiempoADias } from './src/utils/utils.js';
 import { getGroups } from './src/components/main/Groups/Groups.js';
 import HighChart from './src/wialon/api/Highchart.js/index.highchart.js';
 import MessagesService from './src/wialon/utils/getMessages.js';
@@ -71,6 +71,7 @@ export async function iniciarWialon() {
         HighChart.initChartVoltaje(_voltaje);
         HighChart.initChartStatus(_estado);
         HighChart.initchartAll(_gabinete, _voltaje, _estado);
+         $("#loading").fadeOut();
 
     } catch (error) {
         console.error("Error al iniciar Wialon:", error);
@@ -123,6 +124,7 @@ function clasificarUnidad(unidad, _unit) {
 
 const getInfocard = (name, owner = '', total = 0, group_select ) => {
     if (group_select) {
+        $("#loading").fadeIn();
         _group_select = group_select;
         wialonSDK.logout(TOKEN);
         clearHTML("#root-list-card", "#root-categori");
@@ -140,8 +142,8 @@ const getMessagesbyId = async (id, index) => {
     const sensorsByMessages = getSensorsValueByMessages(session.getItem(id), messages);
     const tiempos = calcularTiemposBomba(sensorsByMessages);
 
-    $(`#${id}-encendido`).text(tiempos.encendida);
-    $(`#${id}-apagado`).text(tiempos.apagada);
+    $(`#${id}-encendido`).text( convertirTiempoADias(tiempos.encendida) );
+    $(`#${id}-apagado`).text( convertirTiempoADias(tiempos.apagada) );
 
     initChartDayPie(index, Math.round(extraerHoras(tiempos.encendida)));
     initChartDayBar(index, Math.round(extraerHoras(tiempos.encendida)));
