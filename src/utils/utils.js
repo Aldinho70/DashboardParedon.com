@@ -33,3 +33,6 @@ export const convertirTiempoADias = (tiempoStr) => {
     return resultado.trim();
 }
 
+export function showModal(idModal) {
+    $(idModal).modal("show");
+}

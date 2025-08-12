@@ -4,6 +4,7 @@ import { convertTimestamp, getFechaActual } from './src/utils/timestamp.js';
 import { htmlCreateCard, htmListCard } from './src/components/main/main.js';
 import { htmlCreateNotification } from './src/components/main/Notifications.js';
 import { htmlCreateCardInfo } from './src/components/main/CardsInfo.js';
+import { htmlCreateUnitDetail } from './src/components/main/unitDetail/unitDetail.js';
 import { clearHTML, extraerHoras, convertirTiempoADias } from './src/utils/utils.js';
 import { getGroups } from './src/components/main/Groups/Groups.js';
 import HighChart from './src/wialon/api/Highchart.js/index.highchart.js';
@@ -27,7 +28,7 @@ let _gabinete;
 
 export async function iniciarWialon() {
     try {
-        clearHTML("#root-card", "#root-card-info ", "#root-card-groups", );
+        clearHTML("#root-card", "#root-card-info", "#root-card-groups", "#root-list-card" );
         const _units = [];
 
         _voltaje = { falla: {}, ok: {} };
@@ -60,13 +61,25 @@ export async function iniciarWialon() {
         }
 
         $(`#root_card_${_group_select.replaceAll(' ', '_')}`).addClass('bg-warning');
+        
         $('#root-fecha').html(`Ultima actualizacion: ${getFechaActual()}`);
-
+        
         htmlCreateCard(_units);
         htmlCreateCardInfo(_estado, ['encendido', 'apagado'], 'estado');
         htmlCreateCardInfo(_gabinete, ['abierto', 'cerrado'], 'gabinete');
         htmlCreateCardInfo(_voltaje, ['ok', 'falla'], 'voltaje');
+        
+        if( sessionStorage.getItem('card_actived') ) {
+            $(`#root_card_${sessionStorage.getItem('card_actived')}`).addClass('bg-warning');
+            $(`#root_card_${sessionStorage.getItem('card_actived')}`).click();            
+            
+            if( sessionStorage.getItem('id_acordeon') ) {
+                // $(`#collapse-${sessionStorage.getItem('id_acordeon')}`).addClass('show');
+                $(`#button-accordion-${sessionStorage.getItem('id_acordeon')}`).click();
+            }
+        }
 
+    
         HighChart.initChartGabinetes(_gabinete);
         HighChart.initChartVoltaje(_voltaje);
         HighChart.initChartStatus(_estado);
@@ -137,6 +150,8 @@ const getInfocard = (name, owner = '', total = 0, group_select ) => {
 window.getInfocard = getInfocard;
 
 const getMessagesbyId = async (id, index) => {
+    sessionStorage.setItem('id_acordeon', `${index}`);
+
     const unit_messages = await messageService.loadMessagesToday(id);
     const { messages } = unit_messages;
     const sensorsByMessages = getSensorsValueByMessages(session.getItem(id), messages);
@@ -149,6 +164,23 @@ const getMessagesbyId = async (id, index) => {
     initChartDayBar(index, Math.round(extraerHoras(tiempos.encendida)));
 };
 window.getMessagesbyId = getMessagesbyId;
+
+
+const getDetailUnit = (name) => {
+    const all_data = { ..._voltaje, ..._gabinete, ..._estado };
+    for (const key in all_data) {
+        if (Object.prototype.hasOwnProperty.call(all_data, key)) {
+            const group = all_data[key];            
+            if(group[name]) {
+                console.log(`group[name]`, group[name]);
+                htmlCreateUnitDetail(group[name]);
+                break;
+            }
+        }
+    }
+}
+
+window.getDetailUnit = getDetailUnit;
 
 iniciarWialon();
 setInterval(() => {

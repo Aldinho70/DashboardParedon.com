@@ -56,6 +56,8 @@ $(document).ready(function () {
         </div>
       </div>
     </div>
+
+    <div class="modal" tabindex="-1" id="unitDetailModal"></div> 
   `);
   $("#loading").fadeIn();
 });
@@ -105,9 +107,11 @@ export const htmListCard = (data, name, total = 0) => {
   $('#root-card').addClass('d-none')
   $('#root-main-2').removeClass('d-none')
   $('.btn-card-categori').removeClass('bg-warning')
-  $(`#root_card_${name}`).addClass('bg-warning')
+  $(`#root_card_${name}`).addClass('bg-warning'); 
   $('#root-categori').html(`${name.charAt(0).toUpperCase() + name.slice(1)}: ${total} unidades.`)
+
   let index = 0;
+  sessionStorage.setItem('card_actived', name);
 
   for (const key in data) {
     if (Object.prototype.hasOwnProperty.call(data, key)) {
@@ -127,6 +131,7 @@ export const htmListCard = (data, name, total = 0) => {
           <h2 class="accordion-header" id="heading-${index}">
             <button class="accordion-button collapsed d-flex justify-content-between align-items-center rounded-top-4"
                     type="button"
+                    id="button-accordion-${index}"
                     data-bs-toggle="collapse"
                     data-bs-target="#collapse-${index}"
                     onClick="getMessagesbyId('${unit.id_unidad}', ${index})"
@@ -193,6 +198,11 @@ export const htmListCard = (data, name, total = 0) => {
                         <span class="fw-semibold text-${(voltaje.valor === 'N/A') ? 'danger' : 'warning'}">
                           ${voltaje.valor}
                         </span>
+                      </div>
+                    </li>
+                    <li class="list-group-item">
+                      <div class="d-flex justify-content-between">
+                        <button type="button" class="btn btn-warning w-100" onClick="getDetailUnit('${unit.name}')">Ver mas detalles de la unidad</button>
                       </div>
                     </li>
                   </ul>
