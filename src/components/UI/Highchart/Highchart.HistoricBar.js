@@ -39,7 +39,7 @@ export const createHistoricBarChart = ( data, index ) => {
             type: 'column'
         },
         title: {
-            text: 'Historico de Encendido y Apagado de bombas'
+            text: 'Historico de Encendido y Apagado de bombas.'
         },
         subtitle: {
             text:''
