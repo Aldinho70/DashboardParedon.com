@@ -155,7 +155,7 @@ export const htmListCard = (data, name, total = 0) => {
 
               <div class="row g-3">
                 <!-- Columna 1: Info -->
-                <div class="col-md-4">
+                <div class="col-md-4" id="root-column-info-${index}">
                   <ul class="list-group list-group-flush">
                     <li class="list-group-item">
                       <small class="text-muted d-block"><i class="bi bi-clock me-1"></i> Último mensaje:</small>
@@ -202,7 +202,7 @@ export const htmListCard = (data, name, total = 0) => {
                     </li>
                     <li class="list-group-item">
                       <div class="d-flex justify-content-between">
-                        <button type="button" class="btn btn-warning w-100" onClick="getDetailUnit('${unit.name}')">Ver mas detalles de la unidad</button>
+                        <button type="button" class="btn btn-warning w-100" onClick="getDetailUnit('${unit.name}', ${index})">Ver mas detalles de la unidad</button>
                       </div>
                     </li>
                   </ul>

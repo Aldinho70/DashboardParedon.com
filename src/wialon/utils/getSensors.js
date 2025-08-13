@@ -9,7 +9,7 @@ export const getSensorValues = (unit) => {
     for (const i in sensores) {
         if (Object.prototype.hasOwnProperty.call(sensores, i)) {
             const sensor = sensores[i];
-            const sens = unit.getSensor(sensor.id);            
+            const sens = unit.getSensor(sensor.id);
 
             let valor = unit.calculateSensorValue(sens, lastMessage);
             if (valor === -348201.3876) valor = 'N/A';
@@ -17,7 +17,7 @@ export const getSensorValues = (unit) => {
         }
     }
 
-    return result; 
+    return result;
 };
 
 export const getSensorsValueByMessages = (unit, messages) => {
@@ -32,16 +32,16 @@ export const getSensorsValueByMessages = (unit, messages) => {
                 const sensor = sensores[i];
 
                 if (SENSORES.includes(sensor.n)) {
-                    const sens = unit.getSensor(sensor.id);            
+                    const sens = unit.getSensor(sensor.id);
                     let valor = unit.calculateSensorValue(sens, messages[j]);
 
                     if (valor === -348201.3876) {
-                        valor = 'N/A';  
+                        valor = 'N/A';
                     }
 
-                    sensAux.push({ 
-                        nombre: sensor.n, 
-                        valor: valor, 
+                    sensAux.push({
+                        nombre: sensor.n,
+                        valor: valor,
                     });
                 }
             }
@@ -53,6 +53,78 @@ export const getSensorsValueByMessages = (unit, messages) => {
     // console.log(unit.getName(), result);
     return result;
 }
+
+export const getSensorsValueByMessagesWithDate = (unit, messages) => {
+    // Objeto temporal para almacenar la SUMA y el CONTEO de lecturas
+    const datosTemporales = {};
+
+    // Se obtiene la lista de sensores una sola vez fuera del bucle para mayor eficiencia
+    const sensores = unit.getSensors();
+
+    // --- Bucle 'for...in' principal sobre los mensajes ---
+    for (const j in messages) {
+        if (!Object.prototype.hasOwnProperty.call(messages, j)) continue; // Guarda de seguridad para el bucle
+        
+        const message = messages[j];
+
+        // Extraer la fecha y la hora
+        const fechaObjeto = new Date(message.t * 1000);
+        const fechaISOString = fechaObjeto.toISOString();
+        const soloFecha = fechaISOString.substring(0, 10); // "YYYY-MM-DD"
+        const horaDelDia = fechaISOString.substring(11, 13); // "HH"
+
+        // --- Bucle 'for...in' restaurado para los sensores ---
+        for (const i in sensores) {
+            if (Object.prototype.hasOwnProperty.call(sensores, i)) {
+                const sensorInfo = sensores[i]; // Se obtiene el objeto del sensor usando su índice 'i'
+
+                if (SENSORES.includes(sensorInfo.n)) {
+                    const sens = unit.getSensor(sensorInfo.id);
+                    let valor = unit.calculateSensorValue(sens, message);
+
+                    if (valor === -348201.3876) {
+                        valor = 'N/A';
+                    }
+
+                    if (typeof valor === 'number') {
+                        // Creación de la estructura anidada si no existe
+                        if (!datosTemporales[soloFecha]) {
+                            datosTemporales[soloFecha] = {};
+                        }
+                        if (!datosTemporales[soloFecha][horaDelDia]) {
+                            datosTemporales[soloFecha][horaDelDia] = {};
+                        }
+                        if (!datosTemporales[soloFecha][horaDelDia][sensorInfo.n]) {
+                            datosTemporales[soloFecha][horaDelDia][sensorInfo.n] = { suma: 0, conteo: 0 };
+                        }
+                        
+                        // Acumular la suma y el conteo
+                        datosTemporales[soloFecha][horaDelDia][sensorInfo.n].suma += valor;
+                        datosTemporales[soloFecha][horaDelDia][sensorInfo.n].conteo++;
+                    }
+                }
+            }
+        }
+    }
+
+    // --- FASE 2: Calcular los promedios (esta parte no cambia) ---
+    const promediosFinales = {};
+
+    for (const fecha in datosTemporales) {
+        promediosFinales[fecha] = {};
+        for (const hora in datosTemporales[fecha]) {
+            promediosFinales[fecha][hora] = {};
+            for (const sensorNombre in datosTemporales[fecha][hora]) {
+                const datosSensor = datosTemporales[fecha][hora][sensorNombre];
+                const promedio = datosSensor.suma / datosSensor.conteo;
+
+                promediosFinales[fecha][hora][sensorNombre] = parseFloat(promedio.toFixed(2));
+            }
+        }
+    }
+
+    return promediosFinales;
+};
 
 export const getValueByNameSensor = (unit, sensor) => {
     const sensors = getSensorValues(unit);

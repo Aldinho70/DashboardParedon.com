@@ -36,3 +36,26 @@ export const convertirTiempoADias = (tiempoStr) => {
 export function showModal(idModal) {
     $(idModal).modal("show");
 }
+
+export function agruparPorDia(historial) {
+  const resultado = {};
+
+  for (const [fechaStr, lecturas] of Object.entries(historial)) {
+    const fecha = new Date(fechaStr); // parsea el string ISO
+
+    // Obtener fecha en hora local
+    const year = fecha.getFullYear();
+    const month = String(fecha.getMonth() + 1).padStart(2, '0');
+    const day = String(fecha.getDate()).padStart(2, '0');
+
+    const dia = `${year}-${month}-${day}`;
+
+    if (!resultado[dia]) {
+      resultado[dia] = {};
+    }
+
+    resultado[dia][fechaStr] = lecturas;
+  }
+
+  return resultado;
+}

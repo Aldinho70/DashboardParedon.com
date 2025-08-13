@@ -1,16 +1,16 @@
 import wialonSDK from './src/wialon/sdk/wialonSDK.js';
-import { getSensorValues, getSensorsValueByMessages, calcularTiemposBomba, getValueByNameSensor } from './src/wialon/utils/getSensors.js';
+import MessagesService from './src/wialon/utils/getMessages.js';
+import { getGroups } from './src/components/main/Groups/Groups.js';
+import { htmlCreateCardInfo } from './src/components/main/CardsInfo.js';
+import HighChart from './src/wialon/api/Highchart.js/index.highchart.js';
 import { convertTimestamp, getFechaActual } from './src/utils/timestamp.js';
 import { htmlCreateCard, htmListCard } from './src/components/main/main.js';
 import { htmlCreateNotification } from './src/components/main/Notifications.js';
-import { htmlCreateCardInfo } from './src/components/main/CardsInfo.js';
-import { htmlCreateUnitDetail } from './src/components/main/unitDetail/unitDetail.js';
-import { clearHTML, extraerHoras, convertirTiempoADias } from './src/utils/utils.js';
-import { getGroups } from './src/components/main/Groups/Groups.js';
-import HighChart from './src/wialon/api/Highchart.js/index.highchart.js';
-import MessagesService from './src/wialon/utils/getMessages.js';
 import { initChartDayBar } from './src/components/UI/Highchart/Highchart.DayBar.js';
 import { initChartDayPie } from './src/components/UI/Highchart/Highchart.DayPie.js';
+import { clearHTML, extraerHoras, convertirTiempoADias } from './src/utils/utils.js';
+import { htmlCreateUnitDetail } from './src/components/main/unitDetail/unitDetail.js';
+import { getSensorValues, getSensorsValueByMessages, calcularTiemposBomba, getValueByNameSensor } from './src/wialon/utils/getSensors.js';
 
 const TOKEN = "4074942dea57964c374ca3563fe09bf5723A204D0DF9BC90A8D20965BCC0D37210BCAB3D";
 const from = '2025-05-13T23:59';
@@ -166,14 +166,13 @@ const getMessagesbyId = async (id, index) => {
 window.getMessagesbyId = getMessagesbyId;
 
 
-const getDetailUnit = (name) => {
+const getDetailUnit = (name, id_index) => {
     const all_data = { ..._voltaje, ..._gabinete, ..._estado };
     for (const key in all_data) {
         if (Object.prototype.hasOwnProperty.call(all_data, key)) {
             const group = all_data[key];            
             if(group[name]) {
-                console.log(`group[name]`, group[name]);
-                htmlCreateUnitDetail(group[name]);
+                htmlCreateUnitDetail(group[name], id_index);
                 break;
             }
         }
