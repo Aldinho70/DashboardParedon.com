@@ -1,7 +1,9 @@
+import { htmlCreateKpisUnitDetail } from "../../main/unitDetail/unitDetail.js";
+
 export const createHistoricBarChart = ( data, index ) => {
-    
     let arrayEncendida = [];
     let arrayApagada = [];
+    let sumaTotalEncendido = 0;
 
     for (const key in data) {
         if (Object.prototype.hasOwnProperty.call(data, key)) {
@@ -17,9 +19,10 @@ export const createHistoricBarChart = ( data, index ) => {
                         if (Object.prototype.hasOwnProperty.call(hora, key)) {
                             const element = hora[key];
                             if (element.BOMBA) {
-                                if (element.BOMBA === 1) {
+                                if (element.BOMBA == 1) {
+                                    sumaTotalEncendido ++
                                     sum_encendida ++;
-                                } else {
+                                } else if( element.BOMBA == 0 || element.BOMBA < 1 ) {
                                     sum_apagado ++;
                                 }
                             }
@@ -33,7 +36,7 @@ export const createHistoricBarChart = ( data, index ) => {
         }
     }
     
-    
+    $(`#root-kpis-info-${index}`).html(htmlCreateKpisUnitDetail( sumaTotalEncendido, data ));
     Highcharts.chart(`root-chart-info-${index}`, {
         chart: {
             type: 'column'
@@ -64,6 +67,30 @@ export const createHistoricBarChart = ( data, index ) => {
             column: {
                 pointPadding: 0.2,
                 borderWidth: 0
+            },
+            series: {
+                cursor: 'pointer', // cambia el cursor al pasar sobre las barras
+                point: {
+                    events: {
+
+                        click: function () {
+                            let array_bomba = []
+                            console.log( data[this.category] );
+                            for (const key in data[this.category]) {
+                                if (Object.prototype.hasOwnProperty.call(data[this.category], key)) {
+                                    const horas = data[this.category][key];
+                                    for (const key in horas) {
+                                        if (Object.prototype.hasOwnProperty.call(horas, key)) {
+                                            const hora = horas[key];
+                                            array_bomba.push( hora.BOMBA )
+                                        }
+                                    }
+                                }
+                            }
+                            createHistoricDayAreaChart( array_bomba, index, this.category)
+                        }
+                    }
+                }
             }
         },
         series: [
@@ -79,4 +106,47 @@ export const createHistoricBarChart = ( data, index ) => {
             }
         ]
     });
+}
+
+const createHistoricDayAreaChart = ( data, index, dia ) =>{
+
+    $( `#root-chart-info-per-dar-${index}` ).html('');
+    Highcharts.chart(`root-chart-info-per-dar-${index}`, {
+        chart: {
+        type: 'area'
+        },
+        title: {
+            text: `Resumen de estado de bomba del dia ${dia}`
+        },
+        xAxis: {
+            categories: [...Array(24).keys()].map(hour => `${hour}:00`)
+        },
+        yAxis: {
+            title: {
+                text: 'Estado'
+            },
+            min: 0,
+            max: 1,
+            tickInterval: 1,
+            labels: {
+                formatter: function() {
+                    return this.value === 1 ? 'Encendido' : 'Apagado';
+                }
+            }
+        },
+        tooltip: {
+            shared: true,
+            valueSuffix: ''
+        },
+        series: [{
+            name: 'Estado',
+            // data: [1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+            data: data,
+            color: 'green',
+            marker: {
+                enabled: false
+            }
+        }]
+    });
+
 }
