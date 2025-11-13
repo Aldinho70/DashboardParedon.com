@@ -4,6 +4,14 @@ $(document).ready(function () {
   const $toggleBtn = $('#toggleBtn');
   const $openBtn = $('#openBtn');
 
+  // 🔹 Detectar si es móvil al iniciar
+  if ($(window).width() <= 768) {
+    $sidebar.addClass('closed');
+    $mainContent.addClass('expanded');
+    $toggleBtn.html('<i class="bi bi-chevron-right"></i> Mostrar panel');
+    $openBtn.show();
+  }
+
   $toggleBtn.on('click', function () {
     $sidebar.toggleClass('closed');
     $mainContent.toggleClass('expanded');
