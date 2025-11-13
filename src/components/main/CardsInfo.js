@@ -14,29 +14,36 @@ export const htmlCreateCardInfo = (data, filters, owner) => {
 }
 
 const htmlCardInfo = (data) => {
-  if ($(`body .${data.owner}-card`).length == 0) {
+  if ($(`body .${data.owner}-card`).length === 0) {
     $("#root-card-info").append(`
-        <div class="card mb-3 col-4 shadow-sm rounded-4 ">
-          <div class="card-header fw-bold text-center">${data.owner.charAt(0).toUpperCase() + data.owner.slice(1)} de bombas</div>
-          <div class="card-body ${data.owner}-card row" id=""></div>
-        </div>`);
+      <div class="col-12 col-md-6 col-lg-4 mb-3">
+        <div class="card shadow-sm rounded-4 h-100">
+          <div class="card-header fw-bold text-center">
+            ${data.owner.charAt(0).toUpperCase() + data.owner.slice(1)} de bombas
+          </div>
+          <div class="card-body ${data.owner}-card row g-3 justify-content-center"></div>
+        </div>
+      </div>
+    `);
   }
 
-  $(`.${data.owner}-card`).append(`      
-      <div class="row g-0 align-items-center col-6 rounded-4 hover-animate btn-card-categori" id="root_card_${data.name}" onClick="getInfocard('${data.name}', '_${data.owner}', ${data.length})">
-        <div class="col-auto p-3">
-          <div class="bg-${severity[data.name]} bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center " style="width: 50px; height: 50px;">
+  $(`.${data.owner}-card`).append(`
+    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+      <div class="card border-0 shadow-sm rounded-4 hover-animate text-center btn-card-categori h-100"
+           id="root_card_${data.name}"
+           onClick="getInfocard('${data.name}', '_${data.owner}', ${data.length})">
+        <div class="card-body d-flex flex-column align-items-center justify-content-center">
+          <div class="bg-${severity[data.name]} bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center mb-2"
+               style="width: 50px; height: 50px;">
             <i class="bi bi-${icons[data.name]} text-${severity[data.name]} fs-4"></i>
           </div>
+          <h6 class="card-title mb-1 text-muted">${data.name.charAt(0).toUpperCase() + data.name.slice(1)}</h6>
+          <h4 class="fw-bold mb-0">${data.length}</h4>
         </div>
-        <div class="col ps-0">
-          <div class="card-body py-3">
-            <h6 class="card-title mb-1 text-muted text-center">${data.name.charAt(0).toUpperCase() + data.name.slice(1)}</h6>
-            <h4 class="mb-0 fw-bold text-center">${data.length}</h4>
-          </div>
-        </div>
-      </div>`);
-}
+      </div>
+    </div>
+  `);
+};
 
 const icons = {
   encendido: 'toggle-on',
