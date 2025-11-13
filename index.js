@@ -12,7 +12,7 @@ import { clearHTML, extraerHoras, convertirTiempoADias } from './src/utils/utils
 import { htmlCreateUnitDetail } from './src/components/main/unitDetail/unitDetail.js';
 import { getSensorValues, getSensorsValueByMessages, calcularTiemposBomba, getValueByNameSensor } from './src/wialon/utils/getSensors.js';
 
-const TOKEN = "4074942dea57964c374ca3563fe09bf5723A204D0DF9BC90A8D20965BCC0D37210BCAB3D";
+const TOKEN = "4074942dea57964c374ca3563fe09bf5A7E9A4CB419FAC3250DDE8EA678A01381276663E";
 const from = '2025-05-13T23:59';
 const to = '2025-05-14T23:59';
 

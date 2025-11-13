@@ -22,7 +22,7 @@ export const getGroups = ( groups ) => {
 const htmlCreateGroups = (data) => {
     if ($('body #root_card_all_units').length == 0) {
         $("#root-card-groups").append(`
-            <div class="card mb-3 col-2 shadow-lg border-0 btn-groups"  onClick="getInfocard('${data.name}', '', ${data.units.length}, 'all_units' )">
+            <div class="card mb-3 col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 mb-3 shadow-lg border-0 btn-groups"  onClick="getInfocard('${data.name}', '', ${data.units.length}, 'all_units' )">
                 <div class="card-body row " >
                     <div class="row g-0 align-items-center hover-animate rounded-4 shadow-lg" id="root_card_all_units">
                         <div class="col-auto p-3">
@@ -43,7 +43,7 @@ const htmlCreateGroups = (data) => {
     }
     
     $("#root-card-groups").append(`
-        <div class="card mb-3 col-2 shadow-sm border-0 btn-groups"  onClick="getInfocard('${data.name}', '', ${data.units.length}, '${data.name}' )" >
+        <div class="card mb-3 col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 mb-3 shadow-sm border-0 btn-groups"  onClick="getInfocard('${data.name}', '', ${data.units.length}, '${data.name}' )" >
             <div class="card-body row" id="">
                 <div class="row g-0 align-items-center hover-animate rounded-4 shadow-lg" id="root_card_${data.name.replaceAll(' ', '_')}">
                     <div class="col-auto p-3">
@@ -62,3 +62,43 @@ const htmlCreateGroups = (data) => {
         </div>`
     );
 }
+
+// const htmlCreateGroups = (data) => {
+//   // Crear card "Todas las unidades" si no existe
+//   if ($('#root_card_all_units').length === 0) {
+//     $("#root-card-groups").append(`
+//       <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 mb-3">
+//         <div class="card h-100 shadow-lg border-0 btn-groups" 
+//              onClick="getInfocard('${data.name}', '', ${data.units.length}, 'all_units')">
+//           <div class="card-body text-center">
+//             <div class="d-flex justify-content-center mb-2">
+//               <img src="./src/assets/img/logojd.png" 
+//                    class="img-fluid rounded-circle" 
+//                    style="width:60px; height:60px;" alt="logo">
+//             </div>
+//             <h6 class="text-muted mb-1">Todas las unidades</h6>
+//             <h4 class="fw-bold mb-0">50+</h4>
+//           </div>
+//         </div>
+//       </div>
+//     `);
+//   }
+
+//   // Crear card del grupo
+//   $("#root-card-groups").append(`
+//     <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 mb-3">
+//       <div class="card h-100 shadow-lg border-0 btn-groups" 
+//            onClick="getInfocard('${data.name}', '', ${data.units.length}, '${data.name}')">
+//         <div class="card-body text-center">
+//           <div class="d-flex justify-content-center mb-2">
+//             <img src="${data.icon}" 
+//                  class="img-fluid rounded-circle" 
+//                  style="width:60px; height:60px;" alt="${data.name}">
+//           </div>
+//           <h6 class="text-muted mb-1">${data.name}</h6>
+//           <h4 class="fw-bold mb-0">${data.units.length}</h4>
+//         </div>
+//       </div>
+//     </div>
+//   `);
+// };
